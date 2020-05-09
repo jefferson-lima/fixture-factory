@@ -9,12 +9,16 @@
     ],
     "license": "MIT",
     "require": {
-
+        "phpdocumentor/reflection-docblock": "^5.1",
+        "fzaninotto/faker": "^1.9"
     },
     "autoload": {
         "psr-4": {
             "Jefferson\\Lima\\": "src/",
             "Jefferson\\Lima\\Test\\": "test/"
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
     }
 }
