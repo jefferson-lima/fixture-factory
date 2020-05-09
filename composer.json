@@ -1,0 +1,20 @@
+{
+    "name": "jefferson-lima/fixture-factory",
+    "description": "",
+    "authors": [
+        {
+            "name": "Jefferson Lima",
+            "email": "jefferson.jal@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Jefferson\\Lima\\": "src/",
+            "Jefferson\\Lima\\Test\\": "test/"
+        }
+    }
+}
