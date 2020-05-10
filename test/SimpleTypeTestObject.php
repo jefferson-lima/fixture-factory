@@ -2,7 +2,7 @@
 
 namespace Jefferson\Lima\Test;
 
-class TestObject
+class SimpleTypeTestObject
 {
     private $nonAnnotatedAttr;
 

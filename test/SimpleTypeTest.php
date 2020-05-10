@@ -6,7 +6,7 @@ use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\FixtureFactoryException;
 use PHPUnit\Framework\TestCase;
 
-class FixtureFactoryTest extends TestCase
+class SimpleTypeTest extends TestCase
 {
     public function testCreateFixtureWithInvalidClass(): void
     {
@@ -38,15 +38,15 @@ class FixtureFactoryTest extends TestCase
      */
     public function testCreateFixtureAssertPropertyType(string $property, string $assertFunction): void
     {
-        $fixture = FixtureFactory::createFixture(TestObject::class);
-        $this->assertTrue($fixture instanceof TestObject);
+        $fixture = FixtureFactory::createFixture(SimpleTypeTestObject::class);
+        $this->assertTrue($fixture instanceof SimpleTypeTestObject);
         $this->assertTrue($assertFunction($fixture->$property));
     }
 
     public function testCreateFixtureAssertNonRepeatedValues()
     {
-        $fixture1 = FixtureFactory::createFixture(TestObject::class);
-        $fixture2 = FixtureFactory::createFixture(TestObject::class);
+        $fixture1 = FixtureFactory::createFixture(SimpleTypeTestObject::class);
+        $fixture2 = FixtureFactory::createFixture(SimpleTypeTestObject::class);
 
         $this->assertNotEquals($fixture1->stringAttr, $fixture2->stringAttr);
         $this->assertNotEquals($fixture1->integerAttr, $fixture2->integerAttr);
