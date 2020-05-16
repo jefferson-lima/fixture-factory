@@ -46,7 +46,7 @@ class FixtureFactory
     /**
      * @param ReflectionProperty $property
      * @param DocBlockFactory $docBlockFactory
-     * @return string|null
+     * @return mixed
      */
     private static function createFixtureForProperty(
         ReflectionProperty $property,
@@ -83,8 +83,7 @@ class FixtureFactory
     private static function getPropertyType(
         ReflectionProperty $property,
         DocBlockFactory $docBlockFactory
-    ): ?Type
-    {
+    ): ?Type {
         $varTagType = null;
         $docComment = $property->getDocComment();
 

@@ -11,7 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class StringValueGeneratorTest extends TestCase
 {
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $simpleString;
 
     /**
@@ -20,8 +22,25 @@ class StringValueGeneratorTest extends TestCase
      */
     private $notBlankString;
 
-    /** @var StringValueGenerator */
-    private $generator;
+    /**
+     * @var string
+     * @Assert\Length(min=300)
+     */
+    private $minLengthString;
+
+    /**
+     * @var string
+     * @Assert\Length(max=3)
+     */
+    private $maxLengthString;
+
+    /**
+     * @var string
+     * @Assert\Length(min=300, max=303)
+     */
+    private $minMaxLengthString;
+
+    private StringValueGenerator $generator;
 
     protected function setUp(): void
     {
@@ -32,21 +51,44 @@ class StringValueGeneratorTest extends TestCase
     {
         $property = $this->getProperty('simpleString');
         $value = $this->generator->generate($property);
-        $this->assertTrue(is_string($value));
+        $this->assertIsString($value);
     }
 
     public function testNotBlankString(): void
     {
         $property = $this->getProperty('notBlankString');
         $value = $this->generator->generate($property);
-        $this->assertTrue(is_string($value));
-        $this->assertFalse(empty($value));
+        $this->assertIsString($value);
+        $this->assertNotEmpty($value);
+    }
+
+    public function testMinLengthString(): void
+    {
+        $property = $this->getProperty('minLengthString');
+        $value = $this->generator->generate($property);
+        $this->assertIsString($value);
+        $this->assertTrue(strlen($value) >= 300);
+    }
+
+    public function testMaxLengthString(): void
+    {
+        $property = $this->getProperty('maxLengthString');
+        $value = $this->generator->generate($property);
+        $this->assertIsString($value);
+        $this->assertTrue(strlen($value) <= 3);
+    }
+
+    public function testMinMaxLengthString(): void
+    {
+        $property = $this->getProperty('minMaxLengthString');
+        $value = $this->generator->generate($property);
+        $this->assertIsString($value);
+        $this->assertTrue(strlen($value) >= 300 && strlen($value) <= 303);
     }
 
     private function getProperty(string $name): ReflectionProperty
     {
-        $reflectionClass = new ReflectionClass(get_class());
+        $reflectionClass = new ReflectionClass(__CLASS__);
         return $reflectionClass->getProperty($name);
     }
-
 }
