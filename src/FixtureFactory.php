@@ -2,19 +2,11 @@
 
 namespace Jefferson\Lima;
 
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
-use phpDocumentor\Reflection\DocBlockFactory;
-use phpDocumentor\Reflection\Type;
-use phpDocumentor\Reflection\Types\Array_;
-use phpDocumentor\Reflection\Types\Boolean;
-use phpDocumentor\Reflection\Types\Compound;
-use phpDocumentor\Reflection\Types\Float_;
-use phpDocumentor\Reflection\Types\Integer;
-use phpDocumentor\Reflection\Types\String_;
+use Jefferson\Lima\Reflection\DocType;
+use Jefferson\Lima\Reflection\DocTypedReflectionClass;
+use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Faker\Factory;
 use Faker\Provider\Lorem;
-use ReflectionClass;
-use ReflectionProperty;
 
 class FixtureFactory
 {
@@ -31,12 +23,10 @@ class FixtureFactory
 
         $fixtureObject = new $class();
 
-        $reflectionClass = new ReflectionClass($class);
-        $docBlockFactory = DocBlockFactory::createInstance();
+        $reflectionClass = new DocTypedReflectionClass($class);
 
-        foreach ($reflectionClass->getProperties() as $property) {
-            $propertyFixture = self::createFixtureForProperty($property, $docBlockFactory);
-            $property->setAccessible(true);
+        foreach ($reflectionClass->getDocProperties() as $property) {
+            $propertyFixture = self::createFixtureForProperty($property);
             $property->setValue($fixtureObject, $propertyFixture);
         }
 
@@ -44,67 +34,29 @@ class FixtureFactory
     }
 
     /**
-     * @param ReflectionProperty $property
-     * @param DocBlockFactory $docBlockFactory
-     * @return string|null
+     * @param DocTypedReflectionProperty $property
+     * @return mixed
      */
-    private static function createFixtureForProperty(
-        ReflectionProperty $property,
-        DocBlockFactory $docBlockFactory
-    ) {
-        $faker = Factory::create();
-        $fixture = null;
-
-        $varTagType = static::getPropertyType($property, $docBlockFactory);
-
-        if ($varTagType instanceof String_) {
-            $fixture = Lorem::word();
-        }
-
-        if ($varTagType instanceof Integer) {
-            $fixture = $faker->randomNumber();
-        }
-
-        if ($varTagType instanceof Boolean) {
-            $fixture = false;
-        }
-
-        if ($varTagType instanceof Float_) {
-            $fixture = $faker->randomFloat();
-        }
-
-        if ($varTagType instanceof Array_) {
-            $fixture = [];
-        }
-
-        return $fixture;
-    }
-
-    private static function getPropertyType(
-        ReflectionProperty $property,
-        DocBlockFactory $docBlockFactory
-    ): ?Type
+    private static function createFixtureForProperty(DocTypedReflectionProperty $property)
     {
-        $varTagType = null;
-        $docComment = $property->getDocComment();
+        $faker = Factory::create();
+        $varTagType = $property->getVarType();
 
-        if ($docComment) {
-            $docBlock = $docBlockFactory->create($docComment);
-            $varTags = $docBlock->getTagsByName('var');
-
-            if (count($varTags) > 0) {
-                $varTag = $varTags[0];
-
-                if ($varTag instanceof Var_) {
-                    $varTagType = $varTag->getType();
-
-                    if ($varTagType instanceof Compound) {
-                        $varTagType = $varTagType->get(0);
-                    }
-                }
-            }
+        switch ($varTagType) {
+            case null:
+                return null;
+            case DocType::STRING:
+                return Lorem::word();
+            case DocType::INT:
+                return $faker->randomNumber();
+            case DocType::BOOL:
+                return false;
+            case DocType::FLOAT:
+                return $faker->randomFloat();
+            case DocType::ARRAY:
+                return [];
+            default:
+                throw new FixtureFactoryException("Unknown type: $varTagType");
         }
-
-        return $varTagType;
     }
 }

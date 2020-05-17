@@ -36,7 +36,15 @@ Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate va
 ### Symfony constraints
 
 It's also possible to use [Symfony validation constraints](https://symfony.com/doc/current/reference/constraints.html#basic-constraints)
-to narrow down the values generated for your properties. (Work in progress)
+to narrow down the values generated for your properties. Here is a list of the currently
+supported annotations:
+
+Strings:
+
+- [NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
+- [Length](https://symfony.com/doc/current/reference/constraints/Length.html)
+
+
 
 
 ## License
