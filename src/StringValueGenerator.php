@@ -15,7 +15,7 @@ class StringValueGenerator
      * @return string
      * @throws AnnotationException
      */
-    public function generate(ReflectionProperty $property)
+    public function generate(ReflectionProperty $property): string
     {
         $value = Lorem::word();
         $value = $this->applyLengthAnnotation($property, $value);

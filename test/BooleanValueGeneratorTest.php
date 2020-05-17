@@ -44,7 +44,7 @@ class BooleanValueGeneratorTest extends TestCase
 
     private function getProperty(string $name): ReflectionProperty
     {
-        $reflectionClass = new ReflectionClass(get_class());
+        $reflectionClass = new ReflectionClass(__CLASS__);
         return $reflectionClass->getProperty($name);
     }
 

@@ -40,7 +40,8 @@ class StringValueGeneratorTest extends TestCase
      */
     private $minMaxLengthString;
 
-    private StringValueGenerator $generator;
+    /** @var StringValueGenerator  */
+    private $generator;
 
     protected function setUp(): void
     {
