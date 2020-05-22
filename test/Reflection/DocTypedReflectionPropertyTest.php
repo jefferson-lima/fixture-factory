@@ -6,6 +6,7 @@ use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
+use Symfony\Component\Validator\Constraints\Email;
 
 class DocTypedReflectionPropertyTest extends TestCase
 {
@@ -19,6 +20,9 @@ class DocTypedReflectionPropertyTest extends TestCase
 
     /** @var int|string|null */
     private $multipleTypesAttr;
+
+    /** @Email  */
+    private $annotatedAttr;
 
     public function hasVarTypeDataProvider(): array
     {
@@ -63,5 +67,17 @@ class DocTypedReflectionPropertyTest extends TestCase
         $property = new DocTypedReflectionProperty(__CLASS__, $property);
         $actualType = $property->getVarType();
         $this->assertEquals($expectedType, $actualType);
+    }
+
+    public function testGetAnnotationWithNonAnnotatedAttr(): void
+    {
+        $property = new DocTypedReflectionProperty(__CLASS__, 'nonAnnotatedAttr');
+        $this->assertNull($property->getAnnotation(Email::class));
+    }
+
+    public function testGetAnnotationWithAnnotatedAttr(): void
+    {
+        $property = new DocTypedReflectionProperty(__CLASS__, 'annotatedAttr');
+        $this->assertNotNull($property->getAnnotation(Email::class));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Jefferson\Lima\Reflection;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Types\Compound;
 use ReflectionException;
@@ -19,6 +20,9 @@ class DocTypedReflectionProperty extends ReflectionProperty
 {
     private const VAR_TAG = 'var';
 
+    /** @var  AnnotationReader */
+    private $annotationReader;
+
     /** @var DocBlock */
     private $docBlock;
 
@@ -26,6 +30,7 @@ class DocTypedReflectionProperty extends ReflectionProperty
     {
         parent::__construct($class, $propertyName);
         $this->docBlock = $this->getDocBlock();
+        $this->annotationReader = new AnnotationReader();
     }
 
     /**
@@ -89,5 +94,14 @@ class DocTypedReflectionProperty extends ReflectionProperty
         }
 
         return $varTagType->__toString();
+    }
+
+    /**
+     * @param string $annotationClass
+     * @return object|null
+     */
+    public function getAnnotation(string $annotationClass)
+    {
+        return $this->annotationReader->getPropertyAnnotation($this, $annotationClass);
     }
 }

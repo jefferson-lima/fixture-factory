@@ -6,7 +6,7 @@ use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionClass;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Faker\Factory;
-use Faker\Provider\Lorem;
+use Jefferson\Lima\String\StringValueGenerator;
 
 class FixtureFactory
 {
@@ -46,7 +46,8 @@ class FixtureFactory
             case null:
                 return null;
             case DocType::STRING:
-                return Lorem::word();
+                $stringGenerator = new StringValueGenerator();
+                return $stringGenerator->generate($property);
             case DocType::INT:
                 return $faker->randomNumber();
             case DocType::BOOL:

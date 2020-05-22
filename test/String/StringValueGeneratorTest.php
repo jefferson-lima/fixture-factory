@@ -2,14 +2,17 @@
 
 namespace Jefferson\Lima\Test;
 
-use Jefferson\Lima\StringValueGenerator;
+use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
+use Jefferson\Lima\String\StringValueGenerator;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionProperty;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class StringValueGeneratorTest extends TestCase
 {
+    /** @var ValidatorInterface */
+    private $validator;
 
     /**
      * @var string
@@ -24,21 +27,16 @@ class StringValueGeneratorTest extends TestCase
 
     /**
      * @var string
-     * @Assert\Length(min=300)
+     * @Assert\Length(min=300, max=303)
      */
-    private $minLengthString;
-
-    /**
-     * @var string
-     * @Assert\Length(max=3)
-     */
-    private $maxLengthString;
+    private $minMaxLengthString;
 
     /**
      * @var string
      * @Assert\Length(min=300, max=303)
+     * @Assert\Email
      */
-    private $minMaxLengthString;
+    private $multipleAnnotationAttr;
 
     /** @var StringValueGenerator  */
     private $generator;
@@ -46,50 +44,38 @@ class StringValueGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->generator = new StringValueGenerator();
+        $this->validator = Validation::createValidator();
     }
 
     public function testSimpleString(): void
     {
-        $property = $this->getProperty('simpleString');
+        $property = new DocTypedReflectionProperty(__CLASS__, 'simpleString') ;
         $value = $this->generator->generate($property);
         $this->assertIsString($value);
     }
 
     public function testNotBlankString(): void
     {
-        $property = $this->getProperty('notBlankString');
+        $property = new DocTypedReflectionProperty(__CLASS__, 'notBlankString') ;
         $value = $this->generator->generate($property);
         $this->assertIsString($value);
         $this->assertNotEmpty($value);
     }
 
-    public function testMinLengthString(): void
-    {
-        $property = $this->getProperty('minLengthString');
-        $value = $this->generator->generate($property);
-        $this->assertIsString($value);
-        $this->assertTrue(strlen($value) >= 300);
-    }
-
-    public function testMaxLengthString(): void
-    {
-        $property = $this->getProperty('maxLengthString');
-        $value = $this->generator->generate($property);
-        $this->assertIsString($value);
-        $this->assertTrue(strlen($value) <= 3);
-    }
-
     public function testMinMaxLengthString(): void
     {
-        $property = $this->getProperty('minMaxLengthString');
+        $property = new DocTypedReflectionProperty(__CLASS__, 'minMaxLengthString') ;
         $value = $this->generator->generate($property);
         $this->assertIsString($value);
         $this->assertTrue(strlen($value) >= 300 && strlen($value) <= 303);
     }
 
-    private function getProperty(string $name): ReflectionProperty
+    public function testMultipleAnnotations(): void
     {
-        $reflectionClass = new ReflectionClass(__CLASS__);
-        return $reflectionClass->getProperty($name);
+        $property = new DocTypedReflectionProperty(__CLASS__, 'multipleAnnotationAttr') ;
+        $value = $this->generator->generate($property);
+
+        $violations = $this->validator->validate($value, new Assert\Email());
+        $this->assertEmpty($violations);
     }
 }

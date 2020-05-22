@@ -36,15 +36,27 @@ Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate va
 ### Symfony constraints
 
 It's also possible to use [Symfony validation constraints](https://symfony.com/doc/current/reference/constraints.html#basic-constraints)
-to narrow down the values generated for your properties. Here is a list of the currently
-supported annotations:
+to narrow down the values generated for your properties. These are the currently supported constraints
+listed by order of precedence:
 
 Strings:
 
-- [NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
+- [Email](https://symfony.com/doc/current/reference/constraints/Email.html)
 - [Length](https://symfony.com/doc/current/reference/constraints/Length.html)
+- [NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
 
+Some constraints can't be applied simultaneously. In this case, the constraint with higher precedence
+ is applied. For example:
 
+```
+/**
+ * @Length(min=255)
+ * @Email
+ */
+private $email;
+```
+
+In this case, the `@Email` constraint is applied, and the `@Length` will be ignored. 
 
 
 ## License
