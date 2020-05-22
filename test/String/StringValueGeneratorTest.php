@@ -35,6 +35,7 @@ class StringValueGeneratorTest extends TestCase
      * @var string
      * @Assert\Length(min=300, max=303)
      * @Assert\Email
+     * @Assert\Regex("/[A-Z][a-z]+/")
      */
     private $multipleAnnotationAttr;
 
@@ -75,7 +76,7 @@ class StringValueGeneratorTest extends TestCase
         $property = new DocTypedReflectionProperty(__CLASS__, 'multipleAnnotationAttr') ;
         $value = $this->generator->generate($property);
 
-        $violations = $this->validator->validate($value, new Assert\Email());
+        $violations = $this->validator->validate($value, new Assert\Regex("/[A-Z][a-z]+/"));
         $this->assertEmpty($violations);
     }
 }

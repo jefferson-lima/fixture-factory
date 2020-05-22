@@ -13,8 +13,9 @@ class StringValueGenerator
 
     public function __construct()
     {
-        $this->handlerChain = new StringEmailHandler();
-        $this->handlerChain->setNext(new StringMinLengthHandler())
+        $this->handlerChain = new StringRegexHandler();
+        $this->handlerChain->setNext(new StringEmailHandler())
+                           ->setNext(new StringMinLengthHandler())
                            ->setNext(new StringMaxLengthHandler());
     }
 

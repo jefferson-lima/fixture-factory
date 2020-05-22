@@ -40,10 +40,10 @@ to narrow down the values generated for your properties. These are the currently
 listed by order of precedence:
 
 Strings:
-
-- [Email](https://symfony.com/doc/current/reference/constraints/Email.html)
-- [Length](https://symfony.com/doc/current/reference/constraints/Length.html)
-- [NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
+- [@Regex](https://symfony.com/doc/current/reference/constraints/Regex.html)
+- [@Email](https://symfony.com/doc/current/reference/constraints/Email.html)
+- [@Length](https://symfony.com/doc/current/reference/constraints/Length.html)
+- [@NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
 
 Some constraints can't be applied simultaneously. In this case, the constraint with higher precedence
  is applied. For example:

@@ -5,14 +5,20 @@ namespace Jefferson\Lima\String;
 use Faker\Factory;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
-use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class StringRegexHandler extends PropertyAnnotationHandler
 {
     public function handle(DocTypedReflectionProperty $property, $value)
     {
-        $emailAnnotation = $property->getAnnotation(Email::class);
-        $faker = Factory::create();
-        return $emailAnnotation ? $faker->email : $this->handleNext($property, $value);
+        $regexAnnotation = $property->getAnnotation(Regex::class);
+
+        if ($regexAnnotation) {
+            $pattern = $regexAnnotation->pattern;
+            $faker = Factory::create();
+            return $faker->regexify($pattern);
+        }
+
+        return $this->handleNext($property, $value);
     }
 }
