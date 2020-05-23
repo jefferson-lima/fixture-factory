@@ -33,6 +33,12 @@ class StringValueGeneratorTest extends TestCase
 
     /**
      * @var string
+     * @Assert\Email
+     */
+    private $emailString;
+
+    /**
+     * @var string
      * @Assert\Length(min=300, max=303)
      * @Assert\Email
      * @Assert\Regex("/[A-Z][a-z]+/")
@@ -69,6 +75,14 @@ class StringValueGeneratorTest extends TestCase
         $value = $this->generator->generate($property);
         $this->assertIsString($value);
         $this->assertTrue(strlen($value) >= 300 && strlen($value) <= 303);
+    }
+
+    public function testEmailString(): void
+    {
+        $property = new DocTypedReflectionProperty(__CLASS__, 'emailString') ;
+        $value = $this->generator->generate($property);
+        $violations = $this->validator->validate($value, new Assert\Email());
+        $this->assertEmpty($violations);
     }
 
     public function testMultipleAnnotations(): void
