@@ -2,18 +2,19 @@
 
 namespace Jefferson\Lima\ValueGenerator;
 
-use Faker\Factory;
 use InvalidArgumentException;
 use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 
-class NumberValueGenerator implements ValueGenerator
+class NumberValueGenerator extends ValueGenerator
 {
     /** @var string */
     private $type;
 
     public function __construct(string $type)
     {
+        parent::__construct();
+
         if ($type !== DocType::INT && $type !== DocType::FLOAT) {
             throw new InvalidArgumentException("Invalid number type: $type");
         }
@@ -26,12 +27,6 @@ class NumberValueGenerator implements ValueGenerator
      */
     public function generate(DocTypedReflectionProperty $property)
     {
-        $faker = Factory::create();
-
-        if ($this->type === DocType::INT) {
-            return $faker->randomNumber();
-        } else {
-            return $faker->randomFloat();
-        }
+        return $this->randomDataProvider->getPositiveNumber($this->type);
     }
 }

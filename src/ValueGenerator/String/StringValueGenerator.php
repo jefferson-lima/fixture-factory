@@ -7,13 +7,15 @@ use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
 use Jefferson\Lima\ValueGenerator\ValueGenerator;
 
-class StringValueGenerator implements ValueGenerator
+class StringValueGenerator extends ValueGenerator
 {
     /** @var PropertyAnnotationHandler */
     private $handlerChain;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->handlerChain = new StringUuidHandler();
         $this->handlerChain->setNext(new StringRegexHandler())
                            ->setNext(new StringEmailHandler())

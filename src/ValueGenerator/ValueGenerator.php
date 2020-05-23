@@ -2,13 +2,22 @@
 
 namespace Jefferson\Lima\ValueGenerator;
 
+use Jefferson\Lima\RandomDataProvider;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 
-interface ValueGenerator
+abstract class ValueGenerator
 {
+    /** @var RandomDataProvider */
+    protected $randomDataProvider;
+
+    public function __construct()
+    {
+        $this->randomDataProvider = new RandomDataProvider();
+    }
+
     /**
      * @param DocTypedReflectionProperty $property
      * @return mixed
      */
-    public function generate(DocTypedReflectionProperty $property);
+    abstract public function generate(DocTypedReflectionProperty $property);
 }

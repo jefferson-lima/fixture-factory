@@ -5,7 +5,7 @@ namespace Jefferson\Lima\ValueGenerator;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class BooleanValueGenerator implements ValueGenerator
+class BooleanValueGenerator extends ValueGenerator
 {
     /**
      * @inheritDoc
