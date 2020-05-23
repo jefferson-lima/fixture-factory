@@ -2,10 +2,9 @@
 
 namespace Jefferson\Lima\Test\ValueGenerator;
 
+use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\BooleanValueGenerator;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class BooleanValueGeneratorTest extends TestCase
@@ -30,22 +29,15 @@ class BooleanValueGeneratorTest extends TestCase
 
     public function testSimpleBoolean(): void
     {
-        $property = $this->getProperty('simpleBoolean');
+        $property = new DocTypedReflectionProperty(__CLASS__, 'simpleBoolean');
         $value = $this->generator->generate($property);
         $this->assertFalse($value);
     }
 
     public function testNotBlankBoolean(): void
     {
-        $property = $this->getProperty('notBlankBoolean');
+        $property = new DocTypedReflectionProperty(__CLASS__, 'notBlankBoolean');
         $value = $this->generator->generate($property);
         $this->assertTrue($value);
     }
-
-    private function getProperty(string $name): ReflectionProperty
-    {
-        $reflectionClass = new ReflectionClass(__CLASS__);
-        return $reflectionClass->getProperty($name);
-    }
-
 }

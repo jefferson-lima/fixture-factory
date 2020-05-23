@@ -5,8 +5,9 @@ namespace Jefferson\Lima\ValueGenerator\String;
 use Faker\Provider\Lorem;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
+use Jefferson\Lima\ValueGenerator\ValueGenerator;
 
-class StringValueGenerator
+class StringValueGenerator implements ValueGenerator
 {
     /** @var PropertyAnnotationHandler */
     private $handlerChain;
@@ -22,10 +23,9 @@ class StringValueGenerator
     }
 
     /**
-     * @param DocTypedReflectionProperty $property
-     * @return string
+     * @inheritDoc
      */
-    public function generate(DocTypedReflectionProperty $property): string
+    public function generate(DocTypedReflectionProperty $property)
     {
         return $this->handlerChain->handle($property, Lorem::word());
     }

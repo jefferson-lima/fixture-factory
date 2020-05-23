@@ -6,6 +6,7 @@ use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionClass;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Faker\Factory;
+use Jefferson\Lima\ValueGenerator\NumberValueGenerator;
 use Jefferson\Lima\ValueGenerator\String\StringValueGenerator;
 
 class FixtureFactory
@@ -49,11 +50,13 @@ class FixtureFactory
                 $stringGenerator = new StringValueGenerator();
                 return $stringGenerator->generate($property);
             case DocType::INT:
-                return $faker->randomNumber();
+                $intGenerator = new NumberValueGenerator(DocType::INT);
+                return $intGenerator->generate($property);
             case DocType::BOOL:
                 return false;
             case DocType::FLOAT:
-                return $faker->randomFloat();
+                $floatGenerator = new NumberValueGenerator(DocType::FLOAT);
+                return $floatGenerator->generate($property);
             case DocType::ARRAY:
                 return [];
             default:

@@ -2,23 +2,16 @@
 
 namespace Jefferson\Lima\ValueGenerator;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use ReflectionProperty;
+use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class BooleanValueGenerator
+class BooleanValueGenerator implements ValueGenerator
 {
-    public function generate(ReflectionProperty $property): bool
+    /**
+     * @inheritDoc
+     */
+    public function generate(DocTypedReflectionProperty $property)
     {
-        $value = false;
-
-        $annotationReader = new AnnotationReader();
-        $notBlankAnnotation = $annotationReader->getPropertyAnnotation($property, NotBlank::class);
-
-        if ($notBlankAnnotation) {
-            $value = true;
-        }
-
-        return $value;
+        return $property->getAnnotation(NotBlank::class) !== null;
     }
 }
