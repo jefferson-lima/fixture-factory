@@ -12,7 +12,6 @@ class StringEmailHandler extends PropertyAnnotationHandler
     public function handle(DocTypedReflectionProperty $property, $value)
     {
         $emailAnnotation = $property->getAnnotation(Email::class);
-        $faker = Factory::create();
-        return $emailAnnotation ? $faker->email : $this->handleNext($property, $value);
+        return $emailAnnotation ? $this->faker->email : $this->handleNext($property, $value);
     }
 }

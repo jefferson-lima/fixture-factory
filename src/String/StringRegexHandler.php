@@ -15,8 +15,7 @@ class StringRegexHandler extends PropertyAnnotationHandler
 
         if ($regexAnnotation) {
             $pattern = $regexAnnotation->pattern;
-            $faker = Factory::create();
-            return $faker->regexify($pattern);
+            return $this->faker->regexify($pattern);
         }
 
         return $this->handleNext($property, $value);
