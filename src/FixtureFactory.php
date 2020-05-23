@@ -6,7 +6,7 @@ use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionClass;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Faker\Factory;
-use Jefferson\Lima\String\StringValueGenerator;
+use Jefferson\Lima\ValueGenerator\String\StringValueGenerator;
 
 class FixtureFactory
 {

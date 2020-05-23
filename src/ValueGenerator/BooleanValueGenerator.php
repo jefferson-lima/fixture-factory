@@ -1,6 +1,6 @@
 <?php
 
-namespace Jefferson\Lima;
+namespace Jefferson\Lima\ValueGenerator;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use ReflectionProperty;

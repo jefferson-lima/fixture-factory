@@ -1,8 +1,8 @@
 <?php
 
-namespace Jefferson\Lima\Test;
+namespace Jefferson\Lima\Test\ValueGenerator;
 
-use Jefferson\Lima\BooleanValueGenerator;
+use Jefferson\Lima\ValueGenerator\BooleanValueGenerator;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionProperty;

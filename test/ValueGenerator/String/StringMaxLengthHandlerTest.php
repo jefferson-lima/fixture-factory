@@ -1,10 +1,9 @@
 <?php
 
-namespace Jefferson\Lima\Test\String;
+namespace Jefferson\Lima\Test\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\String\StringMaxLengthHandler;
-use Jefferson\Lima\String\StringMinLengthHandler;
+use Jefferson\Lima\ValueGenerator\String\StringMaxLengthHandler;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
 

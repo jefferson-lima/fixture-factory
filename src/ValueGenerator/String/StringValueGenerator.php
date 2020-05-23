@@ -1,6 +1,6 @@
 <?php
 
-namespace Jefferson\Lima\String;
+namespace Jefferson\Lima\ValueGenerator\String;
 
 use Faker\Provider\Lorem;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;

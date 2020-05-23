@@ -1,6 +1,6 @@
 <?php
 
-namespace Jefferson\Lima\String;
+namespace Jefferson\Lima\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Reflection\PropertyAnnotationHandler;

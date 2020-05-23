@@ -1,9 +1,9 @@
 <?php
 
-namespace Jefferson\Lima\Test;
+namespace Jefferson\Lima\Test\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\String\StringValueGenerator;
+use Jefferson\Lima\ValueGenerator\String\StringValueGenerator;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Symfony\Component\Validator\Constraint;
