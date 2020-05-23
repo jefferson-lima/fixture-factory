@@ -16,6 +16,7 @@ class StringValueGenerator
         $this->handlerChain = new StringUuidHandler();
         $this->handlerChain->setNext(new StringRegexHandler())
                            ->setNext(new StringEmailHandler())
+                           ->setNext(new StringUrlHandler())
                            ->setNext(new StringMinLengthHandler())
                            ->setNext(new StringMaxLengthHandler());
     }

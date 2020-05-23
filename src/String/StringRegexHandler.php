@@ -2,7 +2,6 @@
 
 namespace Jefferson\Lima\String;
 
-use Faker\Factory;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
 use Symfony\Component\Validator\Constraints\Regex;

@@ -5,6 +5,7 @@ namespace Jefferson\Lima\Test;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\String\StringValueGenerator;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
@@ -52,6 +53,12 @@ class StringValueGeneratorTest extends TestCase
 
     /**
      * @var string
+     * @Assert\Url()
+     */
+    private $urlString;
+
+    /**
+     * @var string
      * @Assert\Length(min=300, max=303)
      * @Assert\Email
      * @Assert\Regex("/[A-Z][a-z]+/")
@@ -82,6 +89,7 @@ class StringValueGeneratorTest extends TestCase
           "@Email" => ['emailString', new Assert\Email()],
           "@Regex" => ['regexString', new Assert\Regex("/[A-Z][a-z]+/")],
           "@Uuid" => ['uuidString', new Assert\Uuid()],
+          "@Url" => ['urlString', new Assert\Url()],
         ];
     }
 
@@ -89,7 +97,7 @@ class StringValueGeneratorTest extends TestCase
      * @dataProvider constraintDataProvider
      * @param string $property
      * @param Constraint $constraint
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testConstraints(string $property, Constraint $constraint): void
     {
