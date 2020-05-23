@@ -41,6 +41,7 @@ listed by order of precedence:
 
 Strings:
 - [@Regex](https://symfony.com/doc/current/reference/constraints/Regex.html)
+- [@Uuid](https://symfony.com/doc/current/reference/constraints/Uuid.html)
 - [@Email](https://symfony.com/doc/current/reference/constraints/Email.html)
 - [@Length](https://symfony.com/doc/current/reference/constraints/Length.html)
 - [@NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)

@@ -5,6 +5,7 @@ namespace Jefferson\Lima\Test;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\String\StringValueGenerator;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -39,6 +40,18 @@ class StringValueGeneratorTest extends TestCase
 
     /**
      * @var string
+     * @Assert\Regex("/[A-Z][a-z]+/")
+     */
+    private $regexString;
+
+    /**
+     * @var string
+     * @Assert\Uuid()
+     */
+    private $uuidString;
+
+    /**
+     * @var string
      * @Assert\Length(min=300, max=303)
      * @Assert\Email
      * @Assert\Regex("/[A-Z][a-z]+/")
@@ -61,36 +74,28 @@ class StringValueGeneratorTest extends TestCase
         $this->assertIsString($value);
     }
 
-    public function testNotBlankString(): void
+    public function constraintDataProvider(): array
     {
-        $property = new DocTypedReflectionProperty(__CLASS__, 'notBlankString') ;
-        $value = $this->generator->generate($property);
-        $this->assertIsString($value);
-        $this->assertNotEmpty($value);
+        return [
+          "@NotBlank" => ['notBlankString', new Assert\NotBlank()],
+          "@Length" => ['minMaxLengthString', new Assert\Length(["min" => 300, "max" => 303])],
+          "@Email" => ['emailString', new Assert\Email()],
+          "@Regex" => ['regexString', new Assert\Regex("/[A-Z][a-z]+/")],
+          "@Uuid" => ['uuidString', new Assert\Uuid()],
+        ];
     }
 
-    public function testMinMaxLengthString(): void
+    /**
+     * @dataProvider constraintDataProvider
+     * @param string $property
+     * @param Constraint $constraint
+     * @throws \ReflectionException
+     */
+    public function testConstraints(string $property, Constraint $constraint): void
     {
-        $property = new DocTypedReflectionProperty(__CLASS__, 'minMaxLengthString') ;
+        $property = new DocTypedReflectionProperty(__CLASS__, $property) ;
         $value = $this->generator->generate($property);
-        $this->assertIsString($value);
-        $this->assertTrue(strlen($value) >= 300 && strlen($value) <= 303);
-    }
-
-    public function testEmailString(): void
-    {
-        $property = new DocTypedReflectionProperty(__CLASS__, 'emailString') ;
-        $value = $this->generator->generate($property);
-        $violations = $this->validator->validate($value, new Assert\Email());
-        $this->assertEmpty($violations);
-    }
-
-    public function testMultipleAnnotations(): void
-    {
-        $property = new DocTypedReflectionProperty(__CLASS__, 'multipleAnnotationAttr') ;
-        $value = $this->generator->generate($property);
-
-        $violations = $this->validator->validate($value, new Assert\Regex("/[A-Z][a-z]+/"));
+        $violations = $this->validator->validate($value, $constraint);
         $this->assertEmpty($violations);
     }
 }
