@@ -59,6 +59,12 @@ class StringValueGeneratorTest extends TestCase
 
     /**
      * @var string
+     * @Assert\Date()
+     */
+    private $dateString;
+
+    /**
+     * @var string
      * @Assert\Length(min=300, max=303)
      * @Assert\Email
      * @Assert\Regex("/[A-Z][a-z]+/")
@@ -90,6 +96,7 @@ class StringValueGeneratorTest extends TestCase
           "@Regex" => ['regexString', new Assert\Regex("/[A-Z][a-z]+/")],
           "@Uuid" => ['uuidString', new Assert\Uuid()],
           "@Url" => ['urlString', new Assert\Url()],
+          "@Date" => ['dateString', new Assert\Date()],
         ];
     }
 

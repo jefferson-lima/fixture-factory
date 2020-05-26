@@ -6,6 +6,7 @@ use Faker\Provider\Lorem;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
 use Jefferson\Lima\ValueGenerator\ValueGenerator;
+use Symfony\Component\Validator\Constraints\Date;
 
 class StringValueGenerator extends ValueGenerator
 {
@@ -17,11 +18,13 @@ class StringValueGenerator extends ValueGenerator
         parent::__construct();
 
         $this->handlerChain = new StringUuidHandler();
-        $this->handlerChain->setNext(new StringRegexHandler())
-                           ->setNext(new StringEmailHandler())
-                           ->setNext(new StringUrlHandler())
-                           ->setNext(new StringMinLengthHandler())
-                           ->setNext(new StringMaxLengthHandler());
+        $this->handlerChain
+             ->setNext(new StringRegexHandler())
+             ->setNext(new StringEmailHandler())
+             ->setNext(new StringUrlHandler())
+             ->setNext(new PropertyAnnotationHandler([$this->randomDataProvider, 'getDateString'], Date::class))
+             ->setNext(new StringMinLengthHandler())
+             ->setNext(new StringMaxLengthHandler());
     }
 
     /**

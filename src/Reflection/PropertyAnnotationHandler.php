@@ -5,7 +5,7 @@ namespace Jefferson\Lima\Reflection;
 use Faker\Factory;
 use Faker\Generator;
 
-abstract class PropertyAnnotationHandler
+class PropertyAnnotationHandler
 {
     /** @var  PropertyAnnotationHandler */
     private $nextHandler;
@@ -13,12 +13,24 @@ abstract class PropertyAnnotationHandler
     /** @var Generator */
     protected $faker;
 
-    public function __construct()
+    /** @var callable */
+    private $handler;
+
+    /** @var string */
+    private $annotationClass;
+
+    public function __construct(callable $handler = null, string $annotationClass = null)
     {
+        $this->handler = $handler;
+        $this->annotationClass = $annotationClass;
         $this->faker = Factory::create();
     }
 
-    abstract public function handle(DocTypedReflectionProperty $property, $value);
+    public function handle(DocTypedReflectionProperty $property, $value)
+    {
+        $annotation = $property->getAnnotation($this->annotationClass);
+        return $annotation ? call_user_func($this->handler) : $this->handleNext($property, $value);
+    }
 
     public function setNext(PropertyAnnotationHandler $nextHandler): PropertyAnnotationHandler
     {

@@ -44,6 +44,7 @@ Strings:
 - [@Uuid](https://symfony.com/doc/current/reference/constraints/Uuid.html)
 - [@Email](https://symfony.com/doc/current/reference/constraints/Email.html)
 - [@Url](https://symfony.com/doc/current/reference/constraints/Url.html)
+- [@Date](https://symfony.com/doc/current/reference/constraints/Date.html)
 - [@Length](https://symfony.com/doc/current/reference/constraints/Length.html)
 - [@NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
 

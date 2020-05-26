@@ -2,6 +2,7 @@
 
 namespace Jefferson\Lima\Test;
 
+use DateTime;
 use InvalidArgumentException as InvalidArgumentExceptionAlias;
 use Jefferson\Lima\RandomDataProvider;
 use Jefferson\Lima\Reflection\DocType;
@@ -77,5 +78,11 @@ class RandomDataProviderTest extends TestCase
         $number = $this->randomDataProvider->getNegativeNumber(DocType::FLOAT);
         $this->assertIsFloat($number);
         $this->assertLessThan(0, $number);
+    }
+
+    public function testGetDateString(): void
+    {
+        $date = $this->randomDataProvider->getDateString();
+        $this->assertNotFalse(DateTime::createFromFormat('Y-m-d', $date));
     }
 }

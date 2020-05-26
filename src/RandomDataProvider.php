@@ -52,4 +52,9 @@ class RandomDataProvider
         $min = $type === DocType::INT ? PHP_INT_MIN : PHP_FLOAT_MIN;
         return $this->getRandomNumber($min, -1, $type);
     }
+
+    public function getDateString(): string
+    {
+        return $this->faker->date();
+    }
 }
