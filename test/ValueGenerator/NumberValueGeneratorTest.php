@@ -8,6 +8,7 @@ use Jefferson\Lima\ValueGenerator\NumberValueGenerator;
 use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Negative;
 use Symfony\Component\Validator\Constraints\Positive;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -34,6 +35,18 @@ class NumberValueGeneratorTest extends TestCase
      * @Positive
      */
     private $positiveFloat;
+
+    /**
+     * @var int
+     * @Negative
+     */
+    private $negativeInt;
+
+    /**
+     * @var int
+     * @Negative
+     */
+    private $negativeFloat;
 
     /** @var NumberValueGenerator */
     private $intGenerator;
@@ -73,6 +86,8 @@ class NumberValueGeneratorTest extends TestCase
         return [
             "@Positive int" => ['positiveInt', DocType::INT, new Positive()],
             "@Positive float" => ['positiveFloat', DocType::FLOAT, new Positive()],
+            "@Negative int" => ['negativeInt', DocType::INT, new Negative()],
+            "@Negative float" => ['negativeFloat', DocType::FLOAT, new Negative()],
         ];
     }
 

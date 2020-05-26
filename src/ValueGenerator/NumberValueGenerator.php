@@ -5,6 +5,7 @@ namespace Jefferson\Lima\ValueGenerator;
 use InvalidArgumentException;
 use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
+use Symfony\Component\Validator\Constraints\Negative;
 
 class NumberValueGenerator extends ValueGenerator
 {
@@ -27,6 +28,10 @@ class NumberValueGenerator extends ValueGenerator
      */
     public function generate(DocTypedReflectionProperty $property)
     {
-        return $this->randomDataProvider->getPositiveNumber($this->type);
+        $negativeAnnotation = $property->getAnnotation(Negative::class);
+
+        return $negativeAnnotation ?
+               $this->randomDataProvider->getNegativeNumber($this->type) :
+               $this->randomDataProvider->getPositiveNumber($this->type);
     }
 }
