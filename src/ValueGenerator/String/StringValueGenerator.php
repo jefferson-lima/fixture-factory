@@ -23,6 +23,7 @@ class StringValueGenerator extends ValueGenerator
              ->setNext(new StringEmailHandler())
              ->setNext(new StringUrlHandler())
              ->setNext(new PropertyAnnotationHandler([$this->randomDataProvider, 'getDateString'], Date::class))
+             ->setNext(new StringDatetimeHandler())
              ->setNext(new StringMinLengthHandler())
              ->setNext(new StringMaxLengthHandler());
     }

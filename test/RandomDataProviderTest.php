@@ -85,4 +85,11 @@ class RandomDataProviderTest extends TestCase
         $date = $this->randomDataProvider->getDateString();
         $this->assertNotFalse(DateTime::createFromFormat('Y-m-d', $date));
     }
+
+    public function testGetDatetimeString(): void
+    {
+        $format = 'Y-m-d H:i:s';
+        $datetime = $this->randomDataProvider->getDatetimeString($format);
+        $this->assertNotFalse(DateTime::createFromFormat($format, $datetime));
+    }
 }

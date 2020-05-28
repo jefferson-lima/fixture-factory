@@ -65,6 +65,12 @@ class StringValueGeneratorTest extends TestCase
 
     /**
      * @var string
+     * @Assert\DateTime(format="d-m-Y H:i:s")
+     */
+    private $datetimeString;
+
+    /**
+     * @var string
      * @Assert\Length(min=300, max=303)
      * @Assert\Email
      * @Assert\Regex("/[A-Z][a-z]+/")
@@ -97,6 +103,7 @@ class StringValueGeneratorTest extends TestCase
           "@Uuid" => ['uuidString', new Assert\Uuid()],
           "@Url" => ['urlString', new Assert\Url()],
           "@Date" => ['dateString', new Assert\Date()],
+          "@Datetime" => ['datetimeString', new Assert\DateTime(['format' => 'd-m-Y H:i:s'])],
         ];
     }
 

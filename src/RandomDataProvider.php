@@ -57,4 +57,10 @@ class RandomDataProvider
     {
         return $this->faker->date();
     }
+
+    public function getDatetimeString(string $format): string
+    {
+        $randomDatetime = $this->faker->dateTime();
+        return $randomDatetime->format($format);
+    }
 }
