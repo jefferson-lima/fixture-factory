@@ -3,10 +3,10 @@
 namespace Jefferson\Lima\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
+use Jefferson\Lima\Reflection\AnnotationHandler;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class StringRegexHandler extends PropertyAnnotationHandler
+class StringRegexHandler extends AnnotationHandler
 {
     public function handle(DocTypedReflectionProperty $property, $value)
     {
@@ -14,7 +14,7 @@ class StringRegexHandler extends PropertyAnnotationHandler
 
         if ($regexAnnotation) {
             $pattern = $regexAnnotation->pattern;
-            return $this->faker->regexify($pattern);
+            return $this->randomDataProvider->getRegex($pattern);
         }
 
         return $this->handleNext($property, $value);

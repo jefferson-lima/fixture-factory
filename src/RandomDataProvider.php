@@ -63,4 +63,25 @@ class RandomDataProvider
         $randomDatetime = $this->faker->dateTime();
         return $randomDatetime->format($format);
     }
+
+    public function getEmail(): string
+    {
+        return $this->faker->email;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->faker->uuid;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->faker->url;
+    }
+
+    public function getRegex(string $regex): string
+    {
+        return $this->faker->regexify($regex);
+    }
+
 }

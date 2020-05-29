@@ -3,10 +3,10 @@
 namespace Jefferson\Lima\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
+use Jefferson\Lima\Reflection\AnnotationHandler;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-class StringDatetimeHandler extends PropertyAnnotationHandler
+class StringDatetimeHandler extends AnnotationHandler
 {
     public const DEFAULT_DATETIME_FORMAT = 'Y-m-d H:i:s';
 

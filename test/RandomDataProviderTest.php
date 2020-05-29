@@ -92,4 +92,32 @@ class RandomDataProviderTest extends TestCase
         $datetime = $this->randomDataProvider->getDatetimeString($format);
         $this->assertNotFalse(DateTime::createFromFormat($format, $datetime));
     }
+
+    public function testGetEmail(): void
+    {
+        $email = $this->randomDataProvider->getEmail();
+        $this->assertNotFalse(filter_var($email, FILTER_VALIDATE_EMAIL));
+    }
+
+    public function testGetUuid(): void
+    {
+        $uuidRegex = '/^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$/';
+
+        $uuid = $this->randomDataProvider->getUuid();
+        $this->assertMatchesRegularExpression($uuidRegex, $uuid);
+    }
+
+    public function testGetUrl(): void
+    {
+        $url = $this->randomDataProvider->getUrl();
+        $this->assertNotFalse(filter_var($url, FILTER_VALIDATE_URL));
+    }
+
+    public function testGetRegex(): void
+    {
+        $uuidRegex = '/^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}$/';
+
+        $uuid = $this->randomDataProvider->getRegex($uuidRegex);
+        $this->assertMatchesRegularExpression($uuidRegex, $uuid);
+    }
 }

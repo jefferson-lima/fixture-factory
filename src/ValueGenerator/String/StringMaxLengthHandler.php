@@ -3,10 +3,10 @@
 namespace Jefferson\Lima\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Reflection\PropertyAnnotationHandler;
+use Jefferson\Lima\Reflection\AnnotationHandler;
 use Symfony\Component\Validator\Constraints\Length;
 
-class StringMaxLengthHandler extends PropertyAnnotationHandler
+class StringMaxLengthHandler extends AnnotationHandler
 {
     public function handle(DocTypedReflectionProperty $property, $value)
     {
