@@ -46,6 +46,7 @@ Strings:
 - [@Url](https://symfony.com/doc/current/reference/constraints/Url.html)
 - [@Date](https://symfony.com/doc/current/reference/constraints/Date.html)
 - [@DateTime](https://symfony.com/doc/current/reference/constraints/DateTime.html)
+- [@Choice](https://symfony.com/doc/current/reference/constraints/Choice.html)
 - [@Length](https://symfony.com/doc/current/reference/constraints/Length.html)
 - [@NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
 

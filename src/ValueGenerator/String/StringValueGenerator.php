@@ -27,6 +27,7 @@ class StringValueGenerator extends ValueGenerator
              ->setNext(new AnnotationHandler([$this->randomDataProvider, 'getUrl'], Url::class))
              ->setNext(new AnnotationHandler([$this->randomDataProvider, 'getDateString'], Date::class))
              ->setNext(new StringDatetimeHandler())
+             ->setNext(new StringChoiceHandler())
              ->setNext(new StringMinLengthHandler())
              ->setNext(new StringMaxLengthHandler());
     }

@@ -40,7 +40,7 @@ class AnnotationHandler
         return $this->nextHandler;
     }
 
-    public function handleNext(DocTypedReflectionProperty $property, $value)
+    protected function handleNext(DocTypedReflectionProperty $property, $value)
     {
         return $this->nextHandler ? $this->nextHandler->handle($property, $value) : $value;
     }

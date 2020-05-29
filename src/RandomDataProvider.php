@@ -84,4 +84,11 @@ class RandomDataProvider
         return $this->faker->regexify($regex);
     }
 
+    /**
+     * @param array $elements
+     * @return mixed|null
+     */
+    public function getElementOf(array $elements) {
+        return $this->faker->randomElement($elements);
+    }
 }

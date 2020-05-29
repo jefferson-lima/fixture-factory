@@ -120,4 +120,17 @@ class RandomDataProviderTest extends TestCase
         $uuid = $this->randomDataProvider->getRegex($uuidRegex);
         $this->assertMatchesRegularExpression($uuidRegex, $uuid);
     }
+
+    public function testGetElementOf(): void
+    {
+        $elements = ['a', 'b', 'c'];
+        $element = $this->randomDataProvider->getElementOf($elements);
+        $this->assertContains($element, $elements);
+    }
+
+    public function testGetElementOfWithEmptyArray(): void
+    {
+        $element = $this->randomDataProvider->getElementOf([]);
+        $this->assertNull($element);
+    }
 }
