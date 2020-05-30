@@ -2,7 +2,7 @@
 
 namespace Jefferson\Lima\Test;
 
-class SimpleTypeTestObject
+class TestObject
 {
     private $nonAnnotatedAttr;
 
@@ -35,6 +35,9 @@ class SimpleTypeTestObject
 
     /** @var string|int|null */
     private $multipleTypesAttr;
+
+    /** @var NestedTestObject */
+    private $objAttr;
 
     public function __get($name)
     {

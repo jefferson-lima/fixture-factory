@@ -9,6 +9,7 @@ use ReflectionException;
 use ReflectionProperty;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use phpDocumentor\Reflection\Type;
 
 /**
  * Class DocTypedReflectionProperty extends the ReflectionProperty class with the
@@ -79,7 +80,7 @@ class DocTypedReflectionProperty extends ReflectionProperty
      *
      * @return string|null
      */
-    public function getVarType(): ?string
+    public function getVarType(): ?Type
     {
         if (!$this->hasVarType()) {
             return null;
@@ -93,7 +94,7 @@ class DocTypedReflectionProperty extends ReflectionProperty
             $varTagType = $varTagType->get(0);
         }
 
-        return $varTagType->__toString();
+        return $varTagType;
     }
 
     /**

@@ -33,6 +33,11 @@ $myFixture = FixtureFactory::createFixture(MyClass::class);
 
 Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate values.
 
+### Supported types
+
+Currently, the supported types are `string`, `int`, `bool`, `float`, and simple objects.
+Nested objects will be generated recursively, but circular references are not supported yet.
+
 ### Symfony constraints
 
 It's also possible to use [Symfony validation constraints](https://symfony.com/doc/current/reference/constraints.html#basic-constraints)

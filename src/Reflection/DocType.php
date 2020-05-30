@@ -2,9 +2,7 @@
 
 namespace Jefferson\Lima\Reflection;
 
-use ReflectionType as CoreReflectionType;
-
-class DocType extends CoreReflectionType
+class DocType
 {
     public const STRING = 'string';
     public const INT = 'int';
