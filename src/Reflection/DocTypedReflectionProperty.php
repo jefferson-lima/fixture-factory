@@ -4,7 +4,10 @@ namespace Jefferson\Lima\Reflection;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\FqsenResolver;
 use phpDocumentor\Reflection\Types\Compound;
+use phpDocumentor\Reflection\Types\Context;
+use phpDocumentor\Reflection\Types\ContextFactory;
 use ReflectionException;
 use ReflectionProperty;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -27,11 +30,21 @@ class DocTypedReflectionProperty extends ReflectionProperty
     /** @var DocBlock */
     private $docBlock;
 
+    /** @var FqsenResolver */
+    private $fqsenResolver;
+
+    /** @var Context */
+    private $context;
+
     public function __construct(string $class, string $propertyName)
     {
         parent::__construct($class, $propertyName);
         $this->docBlock = $this->getDocBlock();
         $this->annotationReader = new AnnotationReader();
+        $this->fqsenResolver = new FqsenResolver();
+
+        $contextFactory = new ContextFactory();
+        $this->context = $contextFactory->createFromReflector($this);
     }
 
     /**
@@ -104,5 +117,16 @@ class DocTypedReflectionProperty extends ReflectionProperty
     public function getAnnotation(string $annotationClass)
     {
         return $this->annotationReader->getPropertyAnnotation($this, $annotationClass);
+    }
+
+    public function getFqsen(): ?string
+    {
+        if (!$this->hasVarType()) {
+            return null;
+        }
+
+        $fqsen = $this->getVarType()->getFqsen()->getName();
+        $resolvedFqsen = $this->fqsenResolver->resolve($fqsen, $this->context);
+        return ltrim($resolvedFqsen, '\\');
     }
 }

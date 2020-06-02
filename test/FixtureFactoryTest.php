@@ -63,4 +63,10 @@ class FixtureFactoryTest extends TestCase
         $this->assertIsString($fixture->objAttr->getStringAttr());
         $this->assertIsInt($fixture->objAttr->getIntAttr());
     }
+
+    public function testCircularReference(): void
+    {
+        $this->expectException(FixtureFactoryException::class);
+        FixtureFactory::createFixture(CircularReferenceTestObject::class);
+    }
 }

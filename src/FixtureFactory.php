@@ -14,6 +14,7 @@ use phpDocumentor\Reflection\Types\Float_;
 use phpDocumentor\Reflection\Types\Object_;
 use phpDocumentor\Reflection\Types\String_;
 use phpDocumentor\Reflection\Types\Integer;
+use ReflectionException;
 
 class FixtureFactory
 {
@@ -28,9 +29,11 @@ class FixtureFactory
             throw new FixtureFactoryException("The class $class was not defined");
         }
 
+
         $fixtureObject = new $class();
 
         $reflectionClass = new DocTypedReflectionClass($class);
+        static::checkForCircularReference($reflectionClass);
 
         foreach ($reflectionClass->getDocProperties() as $property) {
             $propertyFixture = self::createFixtureForProperty($property);
@@ -72,6 +75,38 @@ class FixtureFactory
                 return $objectGenerator->generate($property);
             default:
                 throw new FixtureFactoryException("Unknown type: {$varTagType->__toString()}");
+        }
+    }
+
+    /**
+     * @throws FixtureFactoryException
+     * @throws ReflectionException
+     */
+    private static function checkForCircularReference(DocTypedReflectionClass $class): void
+    {
+        $visited = [];
+        $stack = [$class->getName()];
+
+        while (!empty($stack)) {
+            $currentClass = array_pop($stack);
+            $visited[] = $currentClass;
+            $reflectionClass = new DocTypedReflectionClass($currentClass);
+
+            $objectProperties = $reflectionClass->getObjectProperties();
+            $objectsFqsen = array_map(
+                static function (DocTypedReflectionProperty $property) {
+                    return $property->getFqsen();
+                },
+                $objectProperties
+            );
+
+            foreach ($objectsFqsen as $fqsen) {
+                if (in_array($fqsen, $visited, true)) {
+                    throw new FixtureFactoryException('Circular reference');
+                }
+
+                $stack[] = $fqsen;
+            }
         }
     }
 }
