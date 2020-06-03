@@ -84,28 +84,28 @@ class FixtureFactory
      */
     private static function checkForCircularReference(DocTypedReflectionClass $class): void
     {
-        $visited = [];
+        $visitedClasses = [];
         $stack = [$class->getName()];
 
         while (!empty($stack)) {
             $currentClass = array_pop($stack);
-            $visited[] = $currentClass;
+            $visitedClasses[] = $currentClass;
             $reflectionClass = new DocTypedReflectionClass($currentClass);
 
             $objectProperties = $reflectionClass->getObjectProperties();
-            $objectsFqsen = array_map(
+            $objectsClassNames = array_map(
                 static function (DocTypedReflectionProperty $property) {
                     return $property->getFqsen();
                 },
                 $objectProperties
             );
 
-            foreach ($objectsFqsen as $fqsen) {
-                if (in_array($fqsen, $visited, true)) {
-                    throw new FixtureFactoryException('Circular reference');
+            foreach ($objectsClassNames as $objectsClassName) {
+                if (in_array($objectsClassName, $visitedClasses, true)) {
+                    throw new FixtureFactoryException("Circular reference on class $objectsClassName");
                 }
 
-                $stack[] = $fqsen;
+                $stack[] = $objectsClassName;
             }
         }
     }

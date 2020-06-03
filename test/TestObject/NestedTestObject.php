@@ -1,6 +1,6 @@
 <?php
 
-namespace Jefferson\Lima\Test;
+namespace Jefferson\Lima\Test\TestObject;
 
 class NestedTestObject
 {

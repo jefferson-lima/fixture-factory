@@ -4,6 +4,9 @@ namespace Jefferson\Lima\Test;
 
 use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\FixtureFactoryException;
+use Jefferson\Lima\Test\TestObject\CircularReferenceTestObject;
+use Jefferson\Lima\Test\TestObject\NestedTestObject;
+use Jefferson\Lima\Test\TestObject\TestObject;
 use PHPUnit\Framework\TestCase;
 
 class FixtureFactoryTest extends TestCase
