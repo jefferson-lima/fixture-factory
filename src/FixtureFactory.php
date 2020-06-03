@@ -20,10 +20,11 @@ class FixtureFactory
 {
     /**
      * @param string $class
+     * @param array $overriddenAttrs
      * @return mixed
-     * @throws FixtureFactoryException
+     * @throws ReflectionException
      */
-    public static function createFixture(string $class)
+    public static function createFixture(string $class, array $overriddenAttrs = [])
     {
         if (!class_exists($class)) {
             throw new FixtureFactoryException("The class $class was not defined");
@@ -36,8 +37,8 @@ class FixtureFactory
         static::checkForCircularReference($reflectionClass);
 
         foreach ($reflectionClass->getDocProperties() as $property) {
-            $propertyFixture = self::createFixtureForProperty($property);
-            $property->setValue($fixtureObject, $propertyFixture);
+            $propertyValue = $overriddenAttrs[$property->getName()] ?? self::createFixtureForProperty($property);
+            $property->setValue($fixtureObject, $propertyValue);
         }
 
         return $fixtureObject;

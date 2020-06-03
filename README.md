@@ -38,6 +38,15 @@ Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate va
 Currently, the supported types are `string`, `int`, `bool`, `float`, and simple objects.
 Nested objects will be generated recursively, but circular references are not supported yet.
 
+### Overriding attributes
+
+It's possible to override attributes by passing an array as a second argument to the `createFixture`
+method:
+
+```
+$myFixture = FixtureFactory::createFixture(MyClass::class, ['foo' => 'bar']);
+```
+
 ### Symfony constraints
 
 It's also possible to use [Symfony validation constraints](https://symfony.com/doc/current/reference/constraints.html#basic-constraints)

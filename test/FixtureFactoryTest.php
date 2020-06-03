@@ -72,4 +72,18 @@ class FixtureFactoryTest extends TestCase
         $this->expectException(FixtureFactoryException::class);
         FixtureFactory::createFixture(CircularReferenceTestObject::class);
     }
+
+    public function testOverrideAttribute(): void
+    {
+        $stringAttr = 'overridden attribute';
+        $floatAttr = 0.5;
+
+        $fixture = FixtureFactory::createFixture(
+            TestObject::class,
+            ['stringAttr' => $stringAttr, 'floatAttr' => $floatAttr]
+        );
+
+        $this->assertEquals($stringAttr, $fixture->stringAttr);
+        $this->assertEquals($floatAttr, $fixture->floatAttr);
+    }
 }
