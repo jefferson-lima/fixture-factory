@@ -36,7 +36,8 @@ Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate va
 ### Supported types
 
 Currently, the supported types are `string`, `int`, `bool`, `float`, and simple objects.
-Nested objects will be generated recursively, but circular references are not supported yet.
+Nested objects will be generated recursively. Care must be taken with circular references,
+they must be avoided or overridden, otherwise an exception will be thrown.
 
 ### Overriding attributes
 

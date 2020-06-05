@@ -30,14 +30,18 @@ class FixtureFactory
             throw new FixtureFactoryException("The class $class was not defined");
         }
 
-
         $fixtureObject = new $class();
 
         $reflectionClass = new DocTypedReflectionClass($class);
-        static::checkForCircularReference($reflectionClass);
+        static::checkForCircularReference($reflectionClass, $overriddenAttrs);
 
         foreach ($reflectionClass->getDocProperties() as $property) {
-            $propertyValue = $overriddenAttrs[$property->getName()] ?? self::createFixtureForProperty($property);
+            if (array_key_exists($property->getName(), $overriddenAttrs)) {
+                $propertyValue = $overriddenAttrs[$property->getName()];
+            } else {
+                $propertyValue = self::createFixtureForProperty($property);
+            }
+
             $property->setValue($fixtureObject, $propertyValue);
         }
 
@@ -83,7 +87,7 @@ class FixtureFactory
      * @throws FixtureFactoryException
      * @throws ReflectionException
      */
-    private static function checkForCircularReference(DocTypedReflectionClass $class): void
+    private static function checkForCircularReference(DocTypedReflectionClass $class, array $overriddenAttrs): void
     {
         $visitedClasses = [];
         $stack = [$class->getName()];
@@ -94,6 +98,14 @@ class FixtureFactory
             $reflectionClass = new DocTypedReflectionClass($currentClass);
 
             $objectProperties = $reflectionClass->getObjectProperties();
+
+            $objectProperties = array_filter(
+                $objectProperties,
+                static function (DocTypedReflectionProperty $property) use ($overriddenAttrs) {
+                    return !array_key_exists($property->getName(), $overriddenAttrs);
+                }
+            );
+
             $objectsClassNames = array_map(
                 static function (DocTypedReflectionProperty $property) {
                     return $property->getFqsen();

@@ -7,13 +7,29 @@ class CircularReferenceTestObject
     /** @var TestObject */
     private $nonCircularReference;
 
+    /**
+     * @return TestObject
+     */
+    public function getNonCircularReference(): TestObject
+    {
+        return $this->nonCircularReference;
+    }
+
+    /**
+     * @param TestObject $nonCircularReference
+     */
+    public function setNonCircularReference(TestObject $nonCircularReference): void
+    {
+        $this->nonCircularReference = $nonCircularReference;
+    }
+
     /** @var CircularReferenceBackTestObject */
     private $backReference;
 
     /**
      * @return CircularReferenceBackTestObject
      */
-    public function getBackReference(): CircularReferenceBackTestObject
+    public function getBackReference(): ?CircularReferenceBackTestObject
     {
         return $this->backReference;
     }
@@ -21,7 +37,7 @@ class CircularReferenceTestObject
     /**
      * @param CircularReferenceBackTestObject $backReference
      */
-    public function setBackReference(CircularReferenceBackTestObject $backReference): void
+    public function setBackReference(?CircularReferenceBackTestObject $backReference): void
     {
         $this->backReference = $backReference;
     }

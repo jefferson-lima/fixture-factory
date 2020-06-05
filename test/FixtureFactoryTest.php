@@ -86,4 +86,15 @@ class FixtureFactoryTest extends TestCase
         $this->assertEquals($stringAttr, $fixture->stringAttr);
         $this->assertEquals($floatAttr, $fixture->floatAttr);
     }
+
+    public function testCircularReferenceWithOverriddenAttribute(): void
+    {
+        $fixture = FixtureFactory::createFixture(
+            CircularReferenceTestObject::class,
+            ['backReference' => null]
+        );
+
+        $this->assertNull($fixture->getBackReference());
+        $this->assertNotNull($fixture->getNonCircularReference());
+    }
 }
