@@ -6,6 +6,7 @@ use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\String\StringValueGenerator;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
+use stdClass;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
@@ -95,7 +96,7 @@ class StringValueGeneratorTest extends TestCase
     public function testSimpleString(): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, 'simpleString') ;
-        $value = $this->generator->generate($property);
+        $value = $this->generator->generate($property, new stdClass());
         $this->assertIsString($value);
     }
 
@@ -123,7 +124,7 @@ class StringValueGeneratorTest extends TestCase
     public function testConstraints(string $property, Constraint $constraint): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, $property) ;
-        $value = $this->generator->generate($property);
+        $value = $this->generator->generate($property, new stdClass());
         $violations = $this->validator->validate($value, $constraint);
         $this->assertEmpty($violations);
     }

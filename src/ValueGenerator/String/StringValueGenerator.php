@@ -35,8 +35,8 @@ class StringValueGenerator extends ValueGenerator
     /**
      * @inheritDoc
      */
-    public function generate(DocTypedReflectionProperty $property)
+    public function generate(DocTypedReflectionProperty $property, $object)
     {
-        return $this->handlerChain->handle($property, Lorem::word());
+        return $this->handlerChain->handle($property, Lorem::word(), $object);
     }
 }

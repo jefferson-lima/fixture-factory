@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class StringMaxLengthHandler extends AnnotationHandler
 {
-    public function handle(DocTypedReflectionProperty $property, $value)
+    public function handle(DocTypedReflectionProperty $property, $value, $object)
     {
         $lengthAnnotation = $property->getAnnotation(Length::class);
         $max = $lengthAnnotation ? $lengthAnnotation->max : null;
@@ -17,6 +17,6 @@ class StringMaxLengthHandler extends AnnotationHandler
             $value = substr($value, 0, $max);
         }
 
-        return $this->handleNext($property, $value);
+        return $this->handleNext($property, $value, $object);
     }
 }

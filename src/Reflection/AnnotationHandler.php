@@ -24,14 +24,13 @@ class AnnotationHandler
     {
         $this->handler = $handler;
         $this->annotationClass = $annotationClass;
-        $this->faker = Factory::create();
         $this->randomDataProvider = new RandomDataProvider();
     }
 
-    public function handle(DocTypedReflectionProperty $property, $value)
+    public function handle(DocTypedReflectionProperty $property, $value, $object)
     {
         $annotation = $property->getAnnotation($this->annotationClass);
-        return $annotation ? call_user_func($this->handler) : $this->handleNext($property, $value);
+        return $annotation ? call_user_func($this->handler) : $this->handleNext($property, $value, $object);
     }
 
     public function setNext(AnnotationHandler $nextHandler): AnnotationHandler
@@ -40,8 +39,8 @@ class AnnotationHandler
         return $this->nextHandler;
     }
 
-    protected function handleNext(DocTypedReflectionProperty $property, $value)
+    protected function handleNext(DocTypedReflectionProperty $property, $value, $object)
     {
-        return $this->nextHandler ? $this->nextHandler->handle($property, $value) : $value;
+        return $this->nextHandler ? $this->nextHandler->handle($property, $value, $object) : $value;
     }
 }

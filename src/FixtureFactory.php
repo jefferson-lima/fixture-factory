@@ -2,11 +2,12 @@
 
 namespace Jefferson\Lima;
 
+use Doctrine\ORM\Mapping\OneToOne;
 use Jefferson\Lima\Reflection\DocTypedReflectionClass;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\BooleanValueGenerator;
 use Jefferson\Lima\ValueGenerator\NumberValueGenerator;
-use Jefferson\Lima\ValueGenerator\ObjectValueGenerator;
+use Jefferson\Lima\ValueGenerator\Object\ObjectValueGenerator;
 use Jefferson\Lima\ValueGenerator\String\StringValueGenerator;
 use phpDocumentor\Reflection\Types\Array_;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -39,7 +40,7 @@ class FixtureFactory
             if (array_key_exists($property->getName(), $overriddenAttrs)) {
                 $propertyValue = $overriddenAttrs[$property->getName()];
             } else {
-                $propertyValue = self::createFixtureForProperty($property);
+                $propertyValue = self::createFixtureForProperty($property, $fixtureObject);
             }
 
             $property->setValue($fixtureObject, $propertyValue);
@@ -52,7 +53,7 @@ class FixtureFactory
      * @param DocTypedReflectionProperty $property
      * @return mixed
      */
-    private static function createFixtureForProperty(DocTypedReflectionProperty $property)
+    private static function createFixtureForProperty(DocTypedReflectionProperty $property, $fixtureObject)
     {
         $varTagType = $property->getVarType();
 
@@ -63,21 +64,21 @@ class FixtureFactory
         switch (get_class($varTagType)) {
             case String_::class:
                 $stringGenerator = new StringValueGenerator();
-                return $stringGenerator->generate($property);
+                return $stringGenerator->generate($property, $fixtureObject);
             case Integer::class:
                 $intGenerator = new NumberValueGenerator($varTagType->__toString());
-                return $intGenerator->generate($property);
+                return $intGenerator->generate($property, $fixtureObject);
             case Boolean::class:
                 $booleanGenerator = new BooleanValueGenerator();
-                return $booleanGenerator->generate($property);
+                return $booleanGenerator->generate($property, $fixtureObject);
             case Float_::class:
                 $floatGenerator = new NumberValueGenerator($varTagType->__toString());
-                return $floatGenerator->generate($property);
+                return $floatGenerator->generate($property, $fixtureObject);
             case Array_::class:
                 return [];
             case Object_::class:
                 $objectGenerator = new ObjectValueGenerator();
-                return $objectGenerator->generate($property);
+                return $objectGenerator->generate($property, $fixtureObject);
             default:
                 throw new FixtureFactoryException("Unknown type: {$varTagType->__toString()}");
         }
@@ -102,7 +103,10 @@ class FixtureFactory
             $objectProperties = array_filter(
                 $objectProperties,
                 static function (DocTypedReflectionProperty $property) use ($overriddenAttrs) {
-                    return !array_key_exists($property->getName(), $overriddenAttrs);
+                    $oneToOne = $property->getAnnotation(OneToOne::class);
+
+                    return !array_key_exists($property->getName(), $overriddenAttrs) &&
+                        $oneToOne === null;
                 }
             );
 

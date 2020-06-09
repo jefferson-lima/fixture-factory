@@ -6,11 +6,12 @@ use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\String\StringChoiceHandler;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
+use stdClass;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class StringChoiceHandlerTest extends TestCase
 {
-    public CONST CHOICES = ['a', 'b', 'c'];
+    public const CHOICES = ['a', 'b', 'c'];
 
     /** @var StringChoiceHandler */
     private $handler;
@@ -56,14 +57,14 @@ class StringChoiceHandlerTest extends TestCase
     public function testChoice(string $property, array $choices): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, $property);
-        $value = $this->handler->handle($property, '');
+        $value = $this->handler->handle($property, '', new stdClass());
         $this->assertContains($value, $choices);
     }
 
     public function testChoiceWithFunctionCallable(): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, 'choiceWithFunctionCallable');
-        $value = $this->handler->handle($property, '');
+        $value = $this->handler->handle($property, '', new stdClass());
         $this->assertContains($value, static::getChoices());
     }
 

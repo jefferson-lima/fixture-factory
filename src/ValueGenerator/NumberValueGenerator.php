@@ -26,7 +26,7 @@ class NumberValueGenerator extends ValueGenerator
     /**
      * @inheritDoc
      */
-    public function generate(DocTypedReflectionProperty $property)
+    public function generate(DocTypedReflectionProperty $property, $object)
     {
         $negativeAnnotation = $property->getAnnotation(Negative::class);
 

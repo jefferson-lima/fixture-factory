@@ -17,7 +17,8 @@ abstract class ValueGenerator
 
     /**
      * @param DocTypedReflectionProperty $property
+     * @param object $object
      * @return mixed
      */
-    abstract public function generate(DocTypedReflectionProperty $property);
+    abstract public function generate(DocTypedReflectionProperty $property, $object);
 }

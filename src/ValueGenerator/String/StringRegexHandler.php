@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints\Regex;
 
 class StringRegexHandler extends AnnotationHandler
 {
-    public function handle(DocTypedReflectionProperty $property, $value)
+    public function handle(DocTypedReflectionProperty $property, $value, $object)
     {
         $regexAnnotation = $property->getAnnotation(Regex::class);
 
@@ -17,6 +17,6 @@ class StringRegexHandler extends AnnotationHandler
             return $this->randomDataProvider->getRegex($pattern);
         }
 
-        return $this->handleNext($property, $value);
+        return $this->handleNext($property, $value, $object);
     }
 }

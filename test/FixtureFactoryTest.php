@@ -6,8 +6,11 @@ use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Test\TestObject\CircularReferenceTestObject;
 use Jefferson\Lima\Test\TestObject\NestedTestObject;
+use Jefferson\Lima\Test\TestObject\OneToOneA;
+use Jefferson\Lima\Test\TestObject\OneToOneB;
 use Jefferson\Lima\Test\TestObject\TestObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 class FixtureFactoryTest extends TestCase
 {
@@ -38,6 +41,7 @@ class FixtureFactoryTest extends TestCase
      * @dataProvider createFixtureDataProvider
      * @param string $property
      * @param string $assertFunction
+     * @throws ReflectionException
      */
     public function testCreateFixtureAssertPropertyType(string $property, string $assertFunction): void
     {
@@ -96,5 +100,13 @@ class FixtureFactoryTest extends TestCase
 
         $this->assertNull($fixture->getBackReference());
         $this->assertNotNull($fixture->getNonCircularReference());
+    }
+
+    public function testOneToOne(): void
+    {
+        $fixture = FixtureFactory::createFixture(OneToOneA::class);
+        $this->assertInstanceOf(OneToOneA::class, $fixture);
+        $this->assertInstanceOf(OneToOneB::class, $fixture->getOneToOneWithInversedBy());
+        $this->assertEquals($fixture, $fixture->getOneToOneWithInversedBy()->getOneToOneA());
     }
 }

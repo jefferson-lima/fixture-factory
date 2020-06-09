@@ -7,6 +7,7 @@ use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\NumberValueGenerator;
 use PHPUnit\Framework\TestCase;
 use InvalidArgumentException;
+use stdClass;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Negative;
 use Symfony\Component\Validator\Constraints\Positive;
@@ -70,14 +71,14 @@ class NumberValueGeneratorTest extends TestCase
     public function testSimpleInt(): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, 'simpleInt');
-        $value = $this->intGenerator->generate($property);
+        $value = $this->intGenerator->generate($property, new stdClass());
         $this->assertIsInt($value);
     }
 
     public function testSimpleFloat(): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, 'simpleFloat');
-        $value = $this->floatGenerator->generate($property);
+        $value = $this->floatGenerator->generate($property, new stdClass());
         $this->assertIsFloat($value);
     }
 
@@ -103,10 +104,10 @@ class NumberValueGeneratorTest extends TestCase
         $property = new DocTypedReflectionProperty(__CLASS__, $property) ;
 
         if (DocType::INT === $type) {
-            $value = $this->intGenerator->generate($property);
+            $value = $this->intGenerator->generate($property, new stdClass());
             $this->assertIsInt($value);
         } else {
-            $value = $this->floatGenerator->generate($property);
+            $value = $this->floatGenerator->generate($property, new stdClass());
             $this->assertIsFloat($value);
         }
 

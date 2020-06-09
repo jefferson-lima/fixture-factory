@@ -5,6 +5,7 @@ namespace Jefferson\Lima\Test\ValueGenerator\String;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\String\StringMaxLengthHandler;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class StringMaxLengthHandlerTest extends TestCase
@@ -29,7 +30,7 @@ class StringMaxLengthHandlerTest extends TestCase
         $property = new DocTypedReflectionProperty(__CLASS__, 'maxLengthString') ;
         $initialValue = 'abcdef';
 
-        $value = $this->handler->handle($property, $initialValue);
+        $value = $this->handler->handle($property, $initialValue, new stdClass());
 
         $this->assertIsString($value);
         $this->assertTrue(strlen($value) <= 300);

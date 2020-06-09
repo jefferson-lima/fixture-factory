@@ -5,8 +5,8 @@ namespace Jefferson\Lima\Test\ValueGenerator\String;
 use DateTime;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\String\StringDatetimeHandler;
-use Jefferson\Lima\ValueGenerator\String\StringMaxLengthHandler;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class StringDatetimeHandlerTest extends TestCase
@@ -51,7 +51,7 @@ class StringDatetimeHandlerTest extends TestCase
         $property = new DocTypedReflectionProperty(__CLASS__, $property) ;
         $initialValue = 'abcdef';
 
-        $value = $this->handler->handle($property, $initialValue);
+        $value = $this->handler->handle($property, $initialValue, new stdClass());
 
         $this->assertIsString($value);
         $this->assertNotFalse(DateTime::createFromFormat($format, $value));

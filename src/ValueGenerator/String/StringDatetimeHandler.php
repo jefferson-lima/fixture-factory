@@ -10,7 +10,7 @@ class StringDatetimeHandler extends AnnotationHandler
 {
     public const DEFAULT_DATETIME_FORMAT = 'Y-m-d H:i:s';
 
-    public function handle(DocTypedReflectionProperty $property, $value)
+    public function handle(DocTypedReflectionProperty $property, $value, $object)
     {
         $annotation = $property->getAnnotation(DateTime::class);
 
@@ -19,6 +19,6 @@ class StringDatetimeHandler extends AnnotationHandler
             return $this->randomDataProvider->getDatetimeString($format);
         }
 
-        return $this->handleNext($property, $value);
+        return $this->handleNext($property, $value, $object);
     }
 }

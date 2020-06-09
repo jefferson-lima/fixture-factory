@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class StringMinLengthHandler extends AnnotationHandler
 {
-    public function handle(DocTypedReflectionProperty $property, $value)
+    public function handle(DocTypedReflectionProperty $property, $value, $object)
     {
         $lengthAnnotation = $property->getAnnotation(Length::class);
 
@@ -19,6 +19,6 @@ class StringMinLengthHandler extends AnnotationHandler
             }
         }
 
-        return $this->handleNext($property, $value);
+        return $this->handleNext($property, $value, $object);
     }
 }
