@@ -8,23 +8,19 @@ class OneToOneA
 {
     /**
      * @var OneToOneB
-     * @OneToOne(targetEntity="OneToOneB", inversedBy="oneToOneA")
+     * @OneToOne(targetEntity="OneToOneB", inversedBy="oneToOneAMappedBy")
      */
-    private $oneToOneWithInversedBy;
+    public $oneToOneBInversedBy;
 
     /**
-     * @return mixed
+     * @var OneToOneC
+     * @OneToOne(targetEntity="OneToOneC", mappedBy="oneToOneAInversedBy")
      */
-    public function getOneToOneWithInversedBy()
-    {
-        return $this->oneToOneWithInversedBy;
-    }
+    public $oneToOneCMappedBy;
 
     /**
-     * @param mixed $oneToOneWithInversedBy
+     * @var TestObject
+     * @OneToOne(targetEntity="TestObject")
      */
-    public function setOneToOneWithInversedBy($oneToOneWithInversedBy): void
-    {
-        $this->oneToOneWithInversedBy = $oneToOneWithInversedBy;
-    }
+    public $oneToOneUnidirectional;
 }

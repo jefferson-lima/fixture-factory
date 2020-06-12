@@ -2,8 +2,7 @@
 
 namespace Jefferson\Lima\Reflection;
 
-use Faker\Factory;
-use Faker\Generator;
+use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\RandomDataProvider;
 
 class AnnotationHandler
@@ -27,6 +26,13 @@ class AnnotationHandler
         $this->randomDataProvider = new RandomDataProvider();
     }
 
+    /**
+     * @param DocTypedReflectionProperty $property
+     * @param $value
+     * @param $object
+     * @throws FixtureFactoryException
+     * @return mixed
+     */
     public function handle(DocTypedReflectionProperty $property, $value, $object)
     {
         $annotation = $property->getAnnotation($this->annotationClass);

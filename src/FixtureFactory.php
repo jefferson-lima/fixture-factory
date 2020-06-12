@@ -104,9 +104,9 @@ class FixtureFactory
                 $objectProperties,
                 static function (DocTypedReflectionProperty $property) use ($overriddenAttrs) {
                     $oneToOne = $property->getAnnotation(OneToOne::class);
+                    $biOneToOne = $oneToOne && ($oneToOne->inversedBy || $oneToOne->mappedBy);
 
-                    return !array_key_exists($property->getName(), $overriddenAttrs) &&
-                        $oneToOne === null;
+                    return !array_key_exists($property->getName(), $overriddenAttrs) && !$biOneToOne;
                 }
             );
 

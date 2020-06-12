@@ -8,6 +8,7 @@ use Jefferson\Lima\Test\TestObject\CircularReferenceTestObject;
 use Jefferson\Lima\Test\TestObject\NestedTestObject;
 use Jefferson\Lima\Test\TestObject\OneToOneA;
 use Jefferson\Lima\Test\TestObject\OneToOneB;
+use Jefferson\Lima\Test\TestObject\OneToOneC;
 use Jefferson\Lima\Test\TestObject\TestObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -105,8 +106,13 @@ class FixtureFactoryTest extends TestCase
     public function testOneToOne(): void
     {
         $fixture = FixtureFactory::createFixture(OneToOneA::class);
+
         $this->assertInstanceOf(OneToOneA::class, $fixture);
-        $this->assertInstanceOf(OneToOneB::class, $fixture->getOneToOneWithInversedBy());
-        $this->assertEquals($fixture, $fixture->getOneToOneWithInversedBy()->getOneToOneA());
+        $this->assertInstanceOf(OneToOneB::class, $fixture->oneToOneBInversedBy);
+        $this->assertInstanceOf(OneToOneC::class, $fixture->oneToOneCMappedBy);
+        $this->assertInstanceOf(TestObject::class, $fixture->oneToOneUnidirectional);
+
+        $this->assertEquals($fixture, $fixture->oneToOneBInversedBy->oneToOneAMappedBy);
+        $this->assertEquals($fixture, $fixture->oneToOneCMappedBy->oneToOneAInversedBy);
     }
 }

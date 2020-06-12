@@ -36,8 +36,7 @@ Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate va
 ### Supported types
 
 Currently, the supported types are `string`, `int`, `bool`, `float`, and simple objects.
-Nested objects will be generated recursively. Care must be taken with circular references,
-they must be avoided or overridden, otherwise an exception will be thrown.
+Nested objects will be generated recursively.
 
 ### Overriding attributes
 
@@ -47,6 +46,53 @@ method:
 ```
 $myFixture = FixtureFactory::createFixture(MyClass::class, ['foo' => 'bar']);
 ```
+
+### Circular references
+
+Care must be taken with circular references,
+they must be avoided or overridden, otherwise an exception will be thrown. One example of circular
+reference is shown below:
+
+```
+class Foo {
+  /** @var Bar */
+  private $bar;
+}
+
+class Bar {
+  /** @var Foo */
+  private $foo;
+}
+```
+
+A circular reference can be broken by overriding one attribute:
+
+```
+$myFixture = FixtureFactory::createFixture(MyClass::class, ['bar' => null]);
+```
+
+Doctrine annotations can also be used to resolve circular references, for example:
+
+```
+class Foo {
+  /**
+   * @var Bar
+   * @OneToOne(targetEntity="Bar", inversedBy="foo")
+   */
+  private $bar;
+}
+
+class Bar {
+  /**
+   * @var Foo
+   * @OneToOne(targetEntity="Foo", mappedBy="bar")
+   */
+  private $foo;
+}
+```
+
+In this case, it's possible to identify that `foo` points to `bar`, and that `bar` points back
+at it. Currently, only `@OneToOne` annotation is supported.
 
 ### Symfony constraints
 
@@ -81,6 +127,10 @@ private $email;
 ```
 
 In this case, the `@Email` constraint is applied, and the `@Length` will be ignored. 
+
+### Doctrine Associations
+
+
 
 
 ## License

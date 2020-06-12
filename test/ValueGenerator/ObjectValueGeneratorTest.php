@@ -7,6 +7,7 @@ use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\Test\TestObject\OneToOneA;
 use Jefferson\Lima\Test\TestObject\OneToOneB;
+use Jefferson\Lima\Test\TestObject\OneToOneC;
 use Jefferson\Lima\ValueGenerator\Object\ObjectValueGenerator;
 use PHPUnit\Framework\TestCase;
 
@@ -21,25 +22,41 @@ class ObjectValueGeneratorTest extends TestCase
      */
     private $oneToOneWithoutInversedBy;
 
+    /**
+     * @var OneToOneB
+     * @OneToOne(targetEntity="OneToOneB", inversedBy="invalidProperty")
+     */
+    private $oneToOneWithInvalidProperty;
+
     protected function setUp(): void
     {
         $this->objectGenerator = new ObjectValueGenerator();
     }
 
-    public function testOneToOne(): void
+    public function testOneToOneInversedBy(): void
     {
         $initialObject = new OneToOneA();
-        $property = new DocTypedReflectionProperty(OneToOneA::class, 'oneToOneWithInversedBy');
+        $property = new DocTypedReflectionProperty(OneToOneA::class, 'oneToOneBInversedBy');
         $object = $this->objectGenerator->generate($property, $initialObject);
 
         $this->assertInstanceOf(OneToOneB::class, $object);
-        $this->assertEquals($initialObject, $object->getOneToOneA());
+        $this->assertEquals($initialObject, $object->oneToOneAMappedBy);
     }
 
-    public function testOneToOneWithoutInversedBy(): void
+    public function testOneToOneMappedBy(): void
+    {
+        $initialObject = new OneToOneA();
+        $property = new DocTypedReflectionProperty(OneToOneA::class, 'oneToOneCMappedBy');
+        $object = $this->objectGenerator->generate($property, $initialObject);
+
+        $this->assertInstanceOf(OneToOneC::class, $object);
+        $this->assertEquals($initialObject, $object->oneToOneAInversedBy);
+    }
+
+    public function testOneToOneWithInvalidProperty(): void
     {
         $this->expectException(FixtureFactoryException::class);
-        $property = new DocTypedReflectionProperty(__CLASS__, 'oneToOneWithoutInversedBy');
+        $property = new DocTypedReflectionProperty(__CLASS__, 'oneToOneWithInvalidProperty');
         $this->objectGenerator->generate($property, new OneToOneA());
     }
 }
