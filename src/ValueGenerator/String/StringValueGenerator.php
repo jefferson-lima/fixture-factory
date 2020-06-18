@@ -4,7 +4,7 @@ namespace Jefferson\Lima\ValueGenerator\String;
 
 use Faker\Provider\Lorem;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Reflection\AnnotationHandler;
+use Jefferson\Lima\Annotation\AnnotationHandler;
 use Jefferson\Lima\ValueGenerator\ValueGenerator;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;

@@ -3,7 +3,7 @@
 namespace Jefferson\Lima\ValueGenerator\String;
 
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Reflection\AnnotationHandler;
+use Jefferson\Lima\Annotation\AnnotationHandler;
 use Symfony\Component\Validator\Constraints\Length;
 
 class StringMaxLengthHandler extends AnnotationHandler

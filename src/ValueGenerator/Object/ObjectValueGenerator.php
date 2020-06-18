@@ -3,7 +3,7 @@
 namespace Jefferson\Lima\ValueGenerator\Object;
 
 use Jefferson\Lima\FixtureFactory;
-use Jefferson\Lima\Reflection\AnnotationHandler;
+use Jefferson\Lima\Annotation\AnnotationHandler;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 use Jefferson\Lima\ValueGenerator\ValueGenerator;
 
@@ -16,6 +16,7 @@ class ObjectValueGenerator extends ValueGenerator
     {
         parent::__construct();
         $this->handlerChain = new OneToOneHandler();
+        $this->handlerChain->setNext(new ManyToOneHandler());
     }
 
     /**

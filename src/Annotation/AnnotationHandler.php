@@ -1,9 +1,10 @@
 <?php
 
-namespace Jefferson\Lima\Reflection;
+namespace Jefferson\Lima\Annotation;
 
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\RandomDataProvider;
+use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 
 class AnnotationHandler
 {

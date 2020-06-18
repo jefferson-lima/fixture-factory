@@ -35,7 +35,9 @@ Fixture Factory uses [Faker](https://github.com/fzaninotto/Faker) to generate va
 
 ### Supported types
 
-Currently, the supported types are `string`, `int`, `bool`, `float`, and simple objects.
+Currently, the supported types are `string`, `int`, `bool`, `float`. Objects are supported, as long
+as a concrete class is provided. Abstract classes or interfaces are not supported as it's not possible
+to determine the concrete implementation that should be used. 
 Nested objects will be generated recursively.
 
 ### Overriding attributes
@@ -92,7 +94,7 @@ class Bar {
 ```
 
 In this case, it's possible to identify that `foo` points to `bar`, and that `bar` points back
-at it. Currently, only `@OneToOne` annotation is supported.
+at it.
 
 ### Symfony constraints
 
@@ -130,8 +132,10 @@ In this case, the `@Email` constraint is applied, and the `@Length` will be igno
 
 ### Doctrine Associations
 
+The following Doctrine associations are supported:
 
-
+- [@OneToOne](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#one-to-one-unidirectional) unidirectional and bidirectional
+- [@ManyToOne](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#many-to-one-unidirectional) unidirectional
 
 ## License
 

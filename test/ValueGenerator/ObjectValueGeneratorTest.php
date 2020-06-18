@@ -2,12 +2,15 @@
 
 namespace Jefferson\Lima\Test\ValueGenerator;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\OneToOne;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
+use Jefferson\Lima\Test\TestObject\ManyToOneObject;
 use Jefferson\Lima\Test\TestObject\OneToOneA;
 use Jefferson\Lima\Test\TestObject\OneToOneB;
 use Jefferson\Lima\Test\TestObject\OneToOneC;
+use Jefferson\Lima\Test\TestObject\TestObject;
 use Jefferson\Lima\ValueGenerator\Object\ObjectValueGenerator;
 use PHPUnit\Framework\TestCase;
 
@@ -58,5 +61,19 @@ class ObjectValueGeneratorTest extends TestCase
         $this->expectException(FixtureFactoryException::class);
         $property = new DocTypedReflectionProperty(__CLASS__, 'oneToOneWithInvalidProperty');
         $this->objectGenerator->generate($property, new OneToOneA());
+    }
+
+    public function testManyToOneUnidirectional(): void
+    {
+        $initialObject = new ManyToOneObject();
+        $property = new DocTypedReflectionProperty(ManyToOneObject::class, 'manyToOneUnidirectional');
+        $collection = $this->objectGenerator->generate($property, $initialObject);
+
+        $this->assertInstanceOf(Collection::class, $collection);
+        $this->assertCount(2, $collection);
+
+        foreach ($collection as $element) {
+            $this->assertInstanceOf(TestObject::class, $element);
+        }
     }
 }

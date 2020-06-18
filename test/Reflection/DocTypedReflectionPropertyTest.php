@@ -2,9 +2,12 @@
 
 namespace Jefferson\Lima\Test\Reflection;
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Jefferson\Lima\Annotation\AssociationAnnotation;
 use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Test\TestObject;
+use Jefferson\Lima\Test\TestObject\TestObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
 use Symfony\Component\Validator\Constraints\Email;
@@ -27,6 +30,11 @@ class DocTypedReflectionPropertyTest extends TestCase
 
     /** @var TestObject */
     private $objAttr;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TestObject")
+     */
+    private $associationAnnotationAttr;
 
     public function hasVarTypeDataProvider(): array
     {
@@ -83,6 +91,15 @@ class DocTypedReflectionPropertyTest extends TestCase
     {
         $property = new DocTypedReflectionProperty(__CLASS__, 'annotatedAttr');
         $this->assertNotNull($property->getAnnotation(Email::class));
+    }
+
+    public function testGetAssociationAnnotation(): void
+    {
+        $property = new DocTypedReflectionProperty(__CLASS__, 'associationAnnotationAttr');
+        $this->assertInstanceOf(
+            AssociationAnnotation::class,
+            $property->getAssociationAnnotation(ManyToOne::class)
+        );
     }
 
     public function testGetFqsen(): void

@@ -3,11 +3,10 @@
 namespace Jefferson\Lima\Reflection;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\ORM\Mapping\Annotation;
+use Jefferson\Lima\Annotation\AssociationAnnotation;
 use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\FqsenResolver;
 use phpDocumentor\Reflection\Types\Compound;
-use phpDocumentor\Reflection\Types\Context;
-use phpDocumentor\Reflection\Types\ContextFactory;
 use ReflectionException;
 use ReflectionProperty;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -30,21 +29,11 @@ class DocTypedReflectionProperty extends ReflectionProperty
     /** @var DocBlock */
     private $docBlock;
 
-    /** @var FqsenResolver */
-    private $fqsenResolver;
-
-    /** @var Context */
-    private $context;
-
     public function __construct(string $class, string $propertyName)
     {
         parent::__construct($class, $propertyName);
         $this->docBlock = $this->getDocBlock();
         $this->annotationReader = new AnnotationReader();
-        $this->fqsenResolver = new FqsenResolver();
-
-        $contextFactory = new ContextFactory();
-        $this->context = $contextFactory->createFromReflector($this);
     }
 
     /**
@@ -112,11 +101,17 @@ class DocTypedReflectionProperty extends ReflectionProperty
 
     /**
      * @param string $annotationClass
-     * @return object|null
+     * @return Annotation|null
      */
     public function getAnnotation(string $annotationClass)
     {
         return $this->annotationReader->getPropertyAnnotation($this, $annotationClass);
+    }
+
+    public function getAssociationAnnotation(string $annotationClass): ?AssociationAnnotation
+    {
+        $annotation = $this->getAnnotation($annotationClass);
+        return $annotation ? new AssociationAnnotation($annotation, $this) : null;
     }
 
     public function getFqsen(): ?string
@@ -126,7 +121,6 @@ class DocTypedReflectionProperty extends ReflectionProperty
         }
 
         $fqsen = $this->getVarType()->getFqsen()->getName();
-        $resolvedFqsen = $this->fqsenResolver->resolve($fqsen, $this->context);
-        return ltrim($resolvedFqsen, '\\');
+        return ClassNameResolver::resolve($fqsen, $this);
     }
 }
