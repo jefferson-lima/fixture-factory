@@ -3,7 +3,7 @@
 namespace Jefferson\Lima\Test\Reflection;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Jefferson\Lima\Annotation\AssociationAnnotation;
 use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
@@ -32,7 +32,7 @@ class DocTypedReflectionPropertyTest extends TestCase
     private $objAttr;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TestObject")
+     * @ORM\OneToMany(targetEntity="TestObject")
      */
     private $associationAnnotationAttr;
 
@@ -98,7 +98,7 @@ class DocTypedReflectionPropertyTest extends TestCase
         $property = new DocTypedReflectionProperty(__CLASS__, 'associationAnnotationAttr');
         $this->assertInstanceOf(
             AssociationAnnotation::class,
-            $property->getAssociationAnnotation(ManyToOne::class)
+            $property->getAssociationAnnotation(OneToMany::class)
         );
     }
 

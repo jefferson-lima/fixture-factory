@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\OneToOne;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Jefferson\Lima\Test\TestObject\ManyToOneObject;
+use Jefferson\Lima\Test\TestObject\OneToManyObject;
 use Jefferson\Lima\Test\TestObject\OneToOneA;
 use Jefferson\Lima\Test\TestObject\OneToOneB;
 use Jefferson\Lima\Test\TestObject\OneToOneC;
@@ -63,10 +63,10 @@ class ObjectValueGeneratorTest extends TestCase
         $this->objectGenerator->generate($property, new OneToOneA());
     }
 
-    public function testManyToOneUnidirectional(): void
+    public function testOneToManyUnidirectional(): void
     {
-        $initialObject = new ManyToOneObject();
-        $property = new DocTypedReflectionProperty(ManyToOneObject::class, 'manyToOneUnidirectional');
+        $initialObject = new OneToManyObject();
+        $property = new DocTypedReflectionProperty(OneToManyObject::class, 'oneToManyUnidirectional');
         $collection = $this->objectGenerator->generate($property, $initialObject);
 
         $this->assertInstanceOf(Collection::class, $collection);

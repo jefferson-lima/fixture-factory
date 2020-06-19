@@ -1,4 +1,4 @@
-title: 'Added support to @ManyToOne'
+title: 'Added support to @OneToMany'
 type: added
 author: ''
 group: ''
