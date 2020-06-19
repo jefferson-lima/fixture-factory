@@ -2,9 +2,11 @@
 
 namespace Jefferson\Lima\Test;
 
+use Doctrine\Common\Collections\Collection;
 use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Test\TestObject\CircularReferenceTestObject;
+use Jefferson\Lima\Test\TestObject\ManyToOneObject;
 use Jefferson\Lima\Test\TestObject\NestedTestObject;
 use Jefferson\Lima\Test\TestObject\OneToOneA;
 use Jefferson\Lima\Test\TestObject\OneToOneB;
@@ -114,5 +116,17 @@ class FixtureFactoryTest extends TestCase
 
         $this->assertEquals($fixture, $fixture->oneToOneBInversedBy->oneToOneAMappedBy);
         $this->assertEquals($fixture, $fixture->oneToOneCMappedBy->oneToOneAInversedBy);
+    }
+
+    public function testManyToOne(): void
+    {
+        $fixture = FixtureFactory::createFixture(ManyToOneObject::class);
+
+        $this->assertInstanceOf(ManyToOneObject::class, $fixture);
+        $this->assertInstanceOf(Collection::class, $fixture->manyToOneUnidirectional);
+
+        foreach ($fixture->manyToOneUnidirectional as $element) {
+            $this->assertInstanceOf(TestObject::class, $element);
+        }
     }
 }
