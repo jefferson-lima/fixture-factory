@@ -4,11 +4,9 @@ namespace Jefferson\Lima\ValueGenerator\Object;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\OneToMany;
-use Jefferson\Lima\Annotation\AnnotationHandler;
-use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
 
-class OneToManyHandler extends AnnotationHandler
+class OneToManyHandler extends AssociationHandler
 {
     private const COLLECTION_SIZE = 2;
 
@@ -17,11 +15,11 @@ class OneToManyHandler extends AnnotationHandler
         $annotation = $property->getAssociationAnnotation(OneToMany::class);
 
         if ($annotation) {
-            $targetEntity = $annotation->getTargetEntity();
             $collection = new ArrayCollection();
 
             for ($i = 0; $i < static::COLLECTION_SIZE; $i++) {
-                $collection->add(FixtureFactory::createFixture($targetEntity));
+                $targetObject = $this->createTargetObject($annotation, $object);
+                $collection->add($targetObject);
             }
 
             return $collection;
@@ -29,4 +27,6 @@ class OneToManyHandler extends AnnotationHandler
 
         return $this->handleNext($property, $value, $object);
     }
+
+
 }

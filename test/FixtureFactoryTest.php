@@ -6,7 +6,10 @@ use Doctrine\Common\Collections\Collection;
 use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Test\TestObject\CircularReferenceTestObject;
-use Jefferson\Lima\Test\TestObject\OneToManyObject;
+use Jefferson\Lima\Test\TestObject\ManyToOneBidirectional;
+use Jefferson\Lima\Test\TestObject\ManyToOneUnidirectional;
+use Jefferson\Lima\Test\TestObject\OneToManyBidirectional;
+use Jefferson\Lima\Test\TestObject\OneToManyUnidirectional;
 use Jefferson\Lima\Test\TestObject\NestedTestObject;
 use Jefferson\Lima\Test\TestObject\OneToOneA;
 use Jefferson\Lima\Test\TestObject\OneToOneB;
@@ -118,15 +121,36 @@ class FixtureFactoryTest extends TestCase
         $this->assertEquals($fixture, $fixture->oneToOneCMappedBy->oneToOneAInversedBy);
     }
 
-    public function testOneToMany(): void
+    public function testOneToManyUnidirectional(): void
     {
-        $fixture = FixtureFactory::createFixture(OneToManyObject::class);
+        $fixture = FixtureFactory::createFixture(OneToManyUnidirectional::class);
 
-        $this->assertInstanceOf(OneToManyObject::class, $fixture);
+        $this->assertInstanceOf(OneToManyUnidirectional::class, $fixture);
         $this->assertInstanceOf(Collection::class, $fixture->oneToManyUnidirectional);
 
         foreach ($fixture->oneToManyUnidirectional as $element) {
             $this->assertInstanceOf(TestObject::class, $element);
+        }
+    }
+
+    public function testManyToOne(): void
+    {
+        $fixture = FixtureFactory::createFixture(ManyToOneUnidirectional::class);
+
+        $this->assertInstanceOf(ManyToOneUnidirectional::class, $fixture);
+        $this->assertInstanceOf(TestObject::class, $fixture->manyToOneUnidirectional);
+    }
+
+    public function testOneToManyBidirectional(): void
+    {
+        $fixture = FixtureFactory::createFixture(OneToManyBidirectional::class);
+
+        $this->assertInstanceOf(OneToManyBidirectional::class, $fixture);
+        $this->assertInstanceOf(Collection::class, $fixture->oneToManyBidirectional);
+
+        foreach ($fixture->oneToManyBidirectional as $element) {
+            $this->assertInstanceOf(ManyToOneBidirectional::class, $element);
+            $this->assertEquals($fixture, $element->manyToOneBidirectional);
         }
     }
 }
