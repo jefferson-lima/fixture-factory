@@ -12,6 +12,8 @@ use ReflectionException;
 
 abstract class AssociationHandler extends AnnotationHandler
 {
+    protected const COLLECTION_SIZE = 2;
+
     /**
      * @param AssociationAnnotation $annotation
      * @param $object

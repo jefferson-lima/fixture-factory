@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\Collection;
 use Jefferson\Lima\FixtureFactory;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Test\TestObject\CircularReferenceTestObject;
+use Jefferson\Lima\Test\TestObject\ManyToManyInversedBy;
+use Jefferson\Lima\Test\TestObject\ManyToManyUnidirectional;
 use Jefferson\Lima\Test\TestObject\ManyToOneBidirectional;
 use Jefferson\Lima\Test\TestObject\ManyToOneUnidirectional;
 use Jefferson\Lima\Test\TestObject\OneToManyBidirectional;
@@ -127,6 +129,7 @@ class FixtureFactoryTest extends TestCase
 
         $this->assertInstanceOf(OneToManyUnidirectional::class, $fixture);
         $this->assertInstanceOf(Collection::class, $fixture->oneToManyUnidirectional);
+        $this->assertNotEmpty($fixture->oneToManyUnidirectional);
 
         foreach ($fixture->oneToManyUnidirectional as $element) {
             $this->assertInstanceOf(TestObject::class, $element);
@@ -146,11 +149,53 @@ class FixtureFactoryTest extends TestCase
         $fixture = FixtureFactory::createFixture(OneToManyBidirectional::class);
 
         $this->assertInstanceOf(OneToManyBidirectional::class, $fixture);
-        $this->assertInstanceOf(Collection::class, $fixture->oneToManyBidirectional);
+        $this->assertInstanceOf(Collection::class, $fixture->manyToOneBidirectional);
+        $this->assertNotEmpty($fixture->manyToOneBidirectional);
 
-        foreach ($fixture->oneToManyBidirectional as $element) {
+        foreach ($fixture->manyToOneBidirectional as $element) {
             $this->assertInstanceOf(ManyToOneBidirectional::class, $element);
-            $this->assertEquals($fixture, $element->manyToOneBidirectional);
+            $this->assertEquals($fixture, $element->oneToManyBidirectional);
+        }
+    }
+
+    public function testManyToOneBidirectional(): void
+    {
+        $fixture = FixtureFactory::createFixture(ManyToOneBidirectional::class);
+
+        $this->assertInstanceOf(ManyToOneBidirectional::class, $fixture);
+        $this->assertInstanceOf(OneToManyBidirectional::class, $fixture->oneToManyBidirectional);
+        $this->assertInstanceOf(Collection::class, $fixture->oneToManyBidirectional->manyToOneBidirectional);
+        $this->assertNotEmpty($fixture->oneToManyBidirectional);
+
+        foreach ($fixture->oneToManyBidirectional->manyToOneBidirectional as $element) {
+            $this->assertInstanceOf(ManyToOneBidirectional::class, $element);
+        }
+    }
+
+    public function testManyToManyUnidirectional(): void
+    {
+        $fixture = FixtureFactory::createFixture(ManyToManyUnidirectional::class);
+
+        $this->assertInstanceOf(ManyToManyUnidirectional::class, $fixture);
+        $this->assertInstanceOf(Collection::class, $fixture->manyToManyUnidirectional);
+        $this->assertCount(2, $fixture->manyToManyUnidirectional);
+
+        foreach ($fixture->manyToManyUnidirectional as $element) {
+            $this->assertInstanceOf(TestObject::class, $element);
+        }
+    }
+
+    public function testManyToManyBidirectional(): void
+    {
+        $fixture = FixtureFactory::createFixture(ManyToManyInversedBy::class);
+
+        $this->assertInstanceOf(ManyToManyInversedBy::class, $fixture);
+        $this->assertInstanceOf(Collection::class, $fixture->manyToManyMappedBy);
+        $this->assertCount(2, $fixture->manyToManyMappedBy);
+
+        foreach ($fixture->manyToManyMappedBy as $element) {
+            $this->assertInstanceOf(Collection::class, $element->manyToManyInversedBy);
+            $this->assertContains($fixture, $element->manyToManyInversedBy);
         }
     }
 }

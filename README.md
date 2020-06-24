@@ -134,8 +134,12 @@ In this case, the `@Email` constraint is applied, and the `@Length` will be igno
 
 The following Doctrine associations are supported:
 
-- [@OneToOne](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#one-to-one-unidirectional) unidirectional and bidirectional
-- [@OneToMany](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#one-to-many-unidirectional-with-join-table) unidirectional
+- [@OneToOne](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#one-to-one-unidirectional)
+- [@OneToMany](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#one-to-many-unidirectional-with-join-table)
+- [@ManyToOne](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#many-to-one-unidirectional)
+- [@ManyToMany](https://www.doctrine-project.org/projects/doctrine-orm/en/2.7/reference/association-mapping.html#many-to-many-unidirectional)
+
+For many side of the associations an ArrayCollection with two elements is created. 
 
 ## License
 

@@ -16,7 +16,8 @@ class ObjectValueGenerator extends ValueGenerator
     {
         parent::__construct();
         $this->handlerChain = new OneToOneHandler();
-        $this->handlerChain->setNext(new OneToManyHandler());
+        $this->handlerChain->setNext(new OneToManyHandler())
+                           ->setNext(new ManyToManyHandler());
     }
 
     /**
