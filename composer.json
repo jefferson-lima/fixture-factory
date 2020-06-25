@@ -16,7 +16,7 @@
     "require": {
         "phpdocumentor/reflection-docblock": "^5.1",
         "fzaninotto/faker": "^1.9",
-        "symfony/validator": "^5.0",
+        "symfony/validator": "^4.3.3",
         "doctrine/annotations": "^1.10",
         "doctrine/orm": "^2.7"
     },
