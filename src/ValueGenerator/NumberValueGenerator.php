@@ -5,7 +5,6 @@ namespace Jefferson\Lima\ValueGenerator;
 use InvalidArgumentException;
 use Jefferson\Lima\Reflection\DocType;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
-use Symfony\Component\Validator\Constraints\Negative;
 
 class NumberValueGenerator extends ValueGenerator
 {

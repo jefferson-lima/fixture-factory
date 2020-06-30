@@ -4,6 +4,7 @@ namespace Jefferson\Lima\Reflection;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\Mapping\Annotation;
+use InvalidArgumentException;
 use Jefferson\Lima\Annotation\AssociationAnnotation;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Types\Compound;
@@ -48,10 +49,14 @@ class DocTypedReflectionProperty extends ReflectionProperty
 
     private function getDocBlock(): ?DocBlock
     {
-        $docblockFactory = DocBlockFactory::createInstance();
-        $docComment = $this->getDocComment();
+        try {
+            $docblockFactory = DocBlockFactory::createInstance();
+            $docComment = $this->getDocComment();
 
-        return $docComment ? $docblockFactory->create($docComment) : null;
+            return $docComment ? $docblockFactory->create($docComment) : null;
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
     }
 
     public function setValue($objectOrValue, $value = null)

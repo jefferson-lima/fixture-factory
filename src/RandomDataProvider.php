@@ -4,6 +4,7 @@ namespace Jefferson\Lima;
 
 use Faker\Factory;
 use Faker\Generator;
+use Faker\Provider\Base;
 use Jefferson\Lima\Reflection\DocType;
 use InvalidArgumentException;
 
@@ -81,14 +82,69 @@ class RandomDataProvider
 
     public function getRegex(string $regex): string
     {
-        return $this->faker->regexify($regex);
+        return static::regexify($regex);
     }
 
     /**
      * @param array $elements
      * @return mixed|null
      */
-    public function getElementOf(array $elements) {
+    public function getElementOf(array $elements)
+    {
         return $this->faker->randomElement($elements);
+    }
+
+    /**
+     * This method was copied from fzaninotto/Faker v1.9.1 and should be replaced
+     * when this dependency is upgraded.
+     *
+     * @param string $regex
+     * @return string|string[]|null
+     */
+    private static function regexify($regex = '')
+    {
+        // ditch the anchors
+        $regex = preg_replace('/^\/?\^?/', '', $regex);
+        $regex = preg_replace('/\$?\/?$/', '', $regex);
+        // All {2} become {2,2}
+        $regex = preg_replace('/\{(\d+)\}/', '{\1,\1}', $regex);
+        // Single-letter quantifiers (?, *, +) become bracket quantifiers ({0,1}, {0,rand}, {1, rand})
+        $regex = preg_replace('/(?<!\\\)\?/', '{0,1}', $regex);
+        $regex = preg_replace('/(?<!\\\)\*/', '{0,' . Base::randomDigitNotNull() . '}', $regex);
+        $regex = preg_replace('/(?<!\\\)\+/', '{1,' . Base::randomDigitNotNull() . '}', $regex);
+        // [12]{1,2} becomes [12] or [12][12]
+        $regex = preg_replace_callback('/(\[[^\]]+\])\{(\d+),(\d+)\}/', function ($matches) {
+            return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
+        }, $regex);
+        // (12|34){1,2} becomes (12|34) or (12|34)(12|34)
+        $regex = preg_replace_callback('/(\([^\)]+\))\{(\d+),(\d+)\}/', function ($matches) {
+            return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
+        }, $regex);
+        // A{1,2} becomes A or AA or \d{3} becomes \d\d\d
+        $regex = preg_replace_callback('/(\\\?.)\{(\d+),(\d+)\}/', function ($matches) {
+            return str_repeat($matches[1], Base::randomElement(range($matches[2], $matches[3])));
+        }, $regex);
+        // (this|that) becomes 'this' or 'that'
+        $regex = preg_replace_callback('/\((.*?)\)/', function ($matches) {
+            return Base::randomElement(explode('|', str_replace(array('(', ')'), '', $matches[1])));
+        }, $regex);
+        // All A-F inside of [] become ABCDEF
+        $regex = preg_replace_callback('/\[([^\]]+)\]/', function ($matches) {
+            return '[' . preg_replace_callback('/(\w|\d)\-(\w|\d)/', function ($range) {
+                    return implode('', range($range[1], $range[2]));
+                }, $matches[1]) . ']';
+        }, $regex);
+        // All [ABC] become B (or A or C)
+        $regex = preg_replace_callback('/\[([^\]]+)\]/', function ($matches) {
+            return Base::randomElement(str_split($matches[1]));
+        }, $regex);
+        // replace \d with number and \w with letter and . with ascii
+        $regex = preg_replace_callback('/\\\w/', [Base::class, 'randomLetter'], $regex);
+        $regex = preg_replace_callback('/\\\d/', [Base::class, 'randomDigit'], $regex);
+        $regex = preg_replace_callback('/(?<!\\\)\./', [Base::class, 'randomLetter'], $regex);
+        // remove remaining backslashes
+        $regex = str_replace('\\', '', $regex);
+        // phew
+        return $regex;
     }
 }
