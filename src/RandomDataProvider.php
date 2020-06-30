@@ -25,7 +25,7 @@ class RandomDataProvider
      * @return int|float
      * @throws InvalidArgumentException
      */
-    public function getRandomNumber($min, $max, $type)
+    public function getRandomNumber($min, $max, string $type)
     {
         if ($type !== DocType::INT && $type !== DocType::FLOAT) {
             throw new InvalidArgumentException("Invalid type: $type");

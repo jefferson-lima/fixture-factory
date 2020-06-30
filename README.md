@@ -113,9 +113,6 @@ Strings:
 - [@Length](https://symfony.com/doc/current/reference/constraints/Length.html)
 - [@NotBlank](https://symfony.com/doc/current/reference/constraints/NotBlank.html)
 
-Numbers:
-- [@Positive](https://symfony.com/doc/current/reference/constraints/Positive.html)
-- [@Negative](https://symfony.com/doc/current/reference/constraints/Negative.html)
 
 Some constraints can't be applied simultaneously. In this case, the constraint with higher precedence
  is applied. For example:

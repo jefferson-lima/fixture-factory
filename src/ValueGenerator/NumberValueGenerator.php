@@ -29,8 +29,6 @@ class NumberValueGenerator extends ValueGenerator
     {
         $negativeAnnotation = $property->getAnnotation(Negative::class);
 
-        return $negativeAnnotation ?
-               $this->randomDataProvider->getNegativeNumber($this->type) :
-               $this->randomDataProvider->getPositiveNumber($this->type);
+        return $this->randomDataProvider->getRandomNumber(PHP_INT_MIN, PHP_INT_MAX, $this->type);
     }
 }
