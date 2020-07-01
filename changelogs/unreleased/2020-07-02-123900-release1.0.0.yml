@@ -1,0 +1,4 @@
+title: 'Fixed bug on type resolution of partial type names or builtin types'
+type: fixed
+author: ''
+group: ''

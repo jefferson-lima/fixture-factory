@@ -8,6 +8,8 @@ use InvalidArgumentException;
 use Jefferson\Lima\Annotation\AssociationAnnotation;
 use phpDocumentor\Reflection\DocBlock;
 use phpDocumentor\Reflection\Types\Compound;
+use phpDocumentor\Reflection\Types\Context;
+use phpDocumentor\Reflection\Types\ContextFactory;
 use ReflectionException;
 use ReflectionProperty;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -30,10 +32,17 @@ class DocTypedReflectionProperty extends ReflectionProperty
     /** @var DocBlock */
     private $docBlock;
 
+    /** @var Context */
+    private $context;
+
     public function __construct(string $class, string $propertyName)
     {
         parent::__construct($class, $propertyName);
-        $this->docBlock = $this->getDocBlock();
+
+        $contextFactory = new ContextFactory();
+        $this->context = $contextFactory->createFromReflector($this);
+
+        $this->docBlock = $this->getDocBlock($this->context);
         $this->annotationReader = new AnnotationReader();
     }
 
@@ -47,13 +56,14 @@ class DocTypedReflectionProperty extends ReflectionProperty
         return new DocTypedReflectionProperty($property->getDeclaringClass()->getName(), $property->getName());
     }
 
-    private function getDocBlock(): ?DocBlock
+    private function getDocBlock(Context $context): ?DocBlock
     {
         try {
             $docblockFactory = DocBlockFactory::createInstance();
+
             $docComment = $this->getDocComment();
 
-            return $docComment ? $docblockFactory->create($docComment) : null;
+            return $docComment ? $docblockFactory->create($docComment, $context) : null;
         } catch (InvalidArgumentException $e) {
             return null;
         }
@@ -116,16 +126,11 @@ class DocTypedReflectionProperty extends ReflectionProperty
     public function getAssociationAnnotation(string $annotationClass): ?AssociationAnnotation
     {
         $annotation = $this->getAnnotation($annotationClass);
-        return $annotation ? new AssociationAnnotation($annotation, $this) : null;
+        return $annotation ? new AssociationAnnotation($annotation, $this->context) : null;
     }
 
     public function getFqsen(): ?string
     {
-        if (!$this->hasVarType()) {
-            return null;
-        }
-
-        $fqsen = $this->getVarType()->getFqsen()->getName();
-        return ClassNameResolver::resolve($fqsen, $this);
+        return $this->hasVarType() ? $this->getVarType()->getFqsen() : null;
     }
 }

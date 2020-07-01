@@ -2,7 +2,6 @@
 
 namespace Jefferson\Lima\Annotation;
 
-use Doctrine\Common\Reflection\TypedNoDefaultReflectionProperty;
 use Doctrine\ORM\Mapping\Annotation;
 use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
@@ -11,8 +10,8 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Jefferson\Lima\FixtureFactoryException;
 use Jefferson\Lima\Reflection\ClassNameResolver;
 use Jefferson\Lima\Reflection\DocTypedReflectionProperty;
+use phpDocumentor\Reflection\Types\Context;
 use ReflectionException;
-use Reflector;
 
 class AssociationAnnotation
 {
@@ -26,10 +25,10 @@ class AssociationAnnotation
     /** @var Annotation */
     private $annotation;
 
-    /** @var Reflector */
-    private $reflectorContext;
+    /** @var Context */
+    private $context;
 
-    public function __construct(Annotation $annotation, Reflector $reflectorContext)
+    public function __construct(Annotation $annotation, Context $context)
     {
         $annotationClass = get_class($annotation);
         if (!in_array($annotationClass, static::ASSOCIATION_ANNOTATIONS, true)) {
@@ -37,12 +36,16 @@ class AssociationAnnotation
         }
 
         $this->annotation = $annotation;
-        $this->reflectorContext = $reflectorContext;
+        $this->context = $context;
     }
 
     public function getTargetEntity(): string
     {
-        return ClassNameResolver::resolve($this->annotation->targetEntity, $this->reflectorContext);
+        if (str_contains($this->annotation->targetEntity, '\\')) {
+            return ClassNameResolver::resolve('\\' . $this->annotation->targetEntity, new Context(''));
+        }
+
+        return ClassNameResolver::resolve($this->annotation->targetEntity, $this->context);
     }
 
     /**
@@ -59,7 +62,7 @@ class AssociationAnnotation
                 $targetProperty = new DocTypedReflectionProperty($this->getTargetEntity(), $targetPropertyValue);
             } catch (ReflectionException $ex) {
                 throw new FixtureFactoryException(
-                    "The target entity doesn't have the property $targetPropertyValue"
+                    "The target entity '{$this->getTargetEntity()}' doesn't have the property '$targetPropertyValue'"
                 );
             }
         }

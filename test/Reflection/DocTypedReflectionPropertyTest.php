@@ -2,6 +2,7 @@
 
 namespace Jefferson\Lima\Test\Reflection;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OneToMany;
 use Jefferson\Lima\Annotation\AssociationAnnotation;
@@ -11,6 +12,7 @@ use Jefferson\Lima\Test\TestObject\TestObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException as ReflectionExceptionAlias;
 use Symfony\Component\Validator\Constraints\Email;
+use Jefferson\Lima\Test;
 
 class DocTypedReflectionPropertyTest extends TestCase
 {
@@ -30,6 +32,12 @@ class DocTypedReflectionPropertyTest extends TestCase
 
     /** @var TestObject */
     private $objAttr;
+
+    /** @var Test\TestObject\OneToOneA */
+    private $objWithPartialNamespaceAttr;
+
+    /** @var DateTime */
+    private $builtinTypeAttr;
 
     /**
      * @ORM\OneToMany(targetEntity="TestObject")
@@ -105,7 +113,19 @@ class DocTypedReflectionPropertyTest extends TestCase
     public function testGetFqsen(): void
     {
         $property = new DocTypedReflectionProperty(__CLASS__, 'objAttr');
-        $this->assertEquals(TestObject::class, $property->getFqsen());
+        $this->assertEquals('\\' . TestObject::class, $property->getFqsen());
+    }
+
+    public function testBuiltinType(): void
+    {
+        $property = new DocTypedReflectionProperty(__CLASS__, 'builtinTypeAttr');
+        $this->assertEquals('\\' .DateTime::class, $property->getFqsen());
+    }
+
+    public function testObjWithPartialNamespace(): void
+    {
+        $property = new DocTypedReflectionProperty(__CLASS__, 'objWithPartialNamespaceAttr');
+        $this->assertEquals('\\' . Test\TestObject\OneToOneA::class, $property->getFqsen());
     }
 
     public function testGetFqsenWithNonTypedAttr(): void
