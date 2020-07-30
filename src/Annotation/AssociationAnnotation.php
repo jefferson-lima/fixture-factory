@@ -41,7 +41,7 @@ class AssociationAnnotation
 
     public function getTargetEntity(): string
     {
-        if (str_contains($this->annotation->targetEntity, '\\')) {
+        if (strpos($this->annotation->targetEntity, '\\')) {
             return ClassNameResolver::resolve('\\' . $this->annotation->targetEntity, new Context(''));
         }
 
@@ -54,7 +54,7 @@ class AssociationAnnotation
      */
     public function getTargetProperty(): ?DocTypedReflectionProperty
     {
-        $targetPropertyValue = $this->annotation->inversedBy ?? $this->annotation->mappedBy;
+        $targetPropertyValue = $this->annotation->inversedBy ?? $this->annotation->mappedBy ?? null;
         $targetProperty = null;
 
         if ($targetPropertyValue) {

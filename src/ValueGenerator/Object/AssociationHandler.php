@@ -16,11 +16,11 @@ abstract class AssociationHandler extends AnnotationHandler
 
     /**
      * @param AssociationAnnotation $annotation
-     * @param $object
+     * @param $targetValue
      * @return object
      * @throws ReflectionException
      */
-    protected function createTargetObject(AssociationAnnotation $annotation, $object)
+    protected function createTargetObject(AssociationAnnotation $annotation, $targetValue)
     {
         $targetProperty = $annotation->getTargetProperty();
         $targetPropertyName = $targetProperty ? $targetProperty->getName() : null;
@@ -28,7 +28,7 @@ abstract class AssociationHandler extends AnnotationHandler
 
         if ($targetProperty) {
             $targetProperty->setAccessible(true);
-            $targetProperty->setValue($targetObject, $object);
+            $targetProperty->setValue($targetObject, $targetValue);
         }
         return $targetObject;
     }
